@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Config extends Model
 {
     protected $fillable = [
-        'name', 'memory', 'price', 'status'
+        'name', 'memory', 'price', 'status', 'creator'
     ];
 }

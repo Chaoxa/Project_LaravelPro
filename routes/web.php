@@ -53,15 +53,17 @@ Route::middleware('CheckLogin')->prefix('admin')->group(function () {
     Route::post('product/handle', 'adminProductController@handle')->name('product.handle')->middleware('CheckPermission:product.add');
     Route::get('product/cat', 'adminProductController@category')->name('product.cat')->middleware('CheckPermission:product.add');
     Route::post('product/cat/add', 'adminProductController@category_add')->name('product.cat.add')->middleware('CheckPermission:product.add');
+    Route::post('product/cat/edit/{cat}', 'adminProductController@cat_edit')->name('product.cat.edit')->middleware('CheckPermission:product.update');
+    Route::post('product/cat/update/{cat}', 'adminProductController@cat_update')->name('product.cat.update')->middleware('CheckPermission:product.update');
     Route::get('product/cat/delete/{cat}', 'adminProductController@cat_delete')->name('product.cat.delete')->middleware('CheckPermission:product.delete');
     Route::get('product/color', 'adminProductController@color')->name('product.color')->middleware('CheckPermission:product.add');
     Route::get('product/config', 'adminProductController@config')->name('product.config')->middleware('CheckPermission:product.add');
-    Route::get('product/config/edit/{config}', 'adminProductController@config_edit')->name('product.config.edit')->middleware('CheckPermission:product.add');
-    Route::post('product/config/update/{config}', 'adminProductController@config_update')->name('product.config.update')->middleware('CheckPermission:product.add');
+    Route::post('product/config/edit/{config}', 'adminProductController@config_edit')->name('product.config.edit')->middleware('CheckPermission:product.update');
+    Route::post('product/config/update/{config}', 'adminProductController@config_update')->name('product.config.update')->middleware('CheckPermission:product.update');
     Route::post('product/config/add', 'adminProductController@config_add')->name('product.config.add')->middleware('CheckPermission:product.add');
     Route::get('product/config/delete/{config}', 'adminProductController@config_delete')->name('product.config.delete')->middleware('CheckPermission:product.delete');
     Route::post('product/col/add', 'adminProductController@color_add')->name('product.color.add');
-    Route::get('product/col/edit/{color}', 'adminProductController@edit')->name('product.color.edit');
+    Route::post('product/col/edit/{color}', 'adminProductController@edit')->name('product.color.edit');
     Route::post('product/col/update/{color}', 'adminProductController@color_update')->name('product.color.update');
 
 
@@ -69,6 +71,9 @@ Route::middleware('CheckLogin')->prefix('admin')->group(function () {
     Route::post('dropzonejs/add', 'adminDropzonejs@add')->name('dropzonejs.add');
 });
 
+Route::group(['prefix' => 'laravel-filemanager'], function () {
+    \UniSharp\LaravelFilemanager\Lfm::routes();
+});
 
 //===================CLIENT==================
 Route::get('/', function () {

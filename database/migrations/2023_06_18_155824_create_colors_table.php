@@ -18,6 +18,8 @@ class CreateColorsTable extends Migration
             $table->string('name', 100);
             $table->string('slug', 50);
             $table->string('code', 50);
+            $table->unsignedBigInteger('creator');
+            $table->foreign('creator')->references('id')->on('users')->onDelete('cascade');
             $table->boolean('status')->default(false);
             $table->timestamps();
         });

@@ -83,8 +83,8 @@
                                 @endif
                                 <td>{{$cat -> created_at}}</td>
                                 <td>
-                                    <a data-toggle="modal" data-target="#exampleModalCenter"
-                                        class="btn btn-success btn-sm rounded-0 text-white" type="button"
+                                    <a data-toggle="modal" data-id="{{ $cat->id }}" data-target="#exampleModalCenter"
+                                        class="btn btn-success btn-edit btn-sm rounded-0 text-white" type="button"
                                         data-toggle="tooltip" data-placement="top" title="Edit"><i
                                             class="fa fa-edit"></i></a>
                                     <a href="{{url('admin/product/cat/delete/'.$cat -> id)}}"
@@ -107,113 +107,132 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Thông tin danh mục</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="title" class="title">Tên danh mục (*)</label>
-                    <input id="title" class="form-control" placeholder="Tên danh mục" name="title" type="text" value="">
+<form method="post" id="id_update">
+    @csrf
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Thông tin danh mục</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-                <div class="form-group">
-                    <label for="slug_modal" class="title">Slug (*)</label>
-                    <input id="slug_modal" class="form-control" placeholder="Slug" name="slug" type="text" value="">
-                </div>
-                <div class="form-group">
-                    <label class="title" for="">Danh mục</label>
-                    <select class="form-control mr-1" name="cat" id="cat_modal">
-                        <option value="0">---Là danh mục cha---</option>
-                        <option style="background: #EEEEEE" value="18" selected="selected">Laptop
-                        </option>
-                        <option value="20" selected="selected">--Asus
-                        </option>
-                        <option value="22" selected="selected">--Acer
-                        </option>
-                        <option value="26">--MSI
-                        </option>
-                        <option value="27" selected="selected">--HP
-                        </option>
-                        <option value="38">--Lenovo
-                        </option>
-                        <option value="40">--Dell
-                        </option>
-                        <option style="background: #EEEEEE" value="19">Điện thoại
-                        </option>
-                        <option value="23">--Iphone
-                        </option>
-                        <option value="24">--SamSung
-                        </option>
-                        <option value="25">--OPPO
-                        </option>
-                        <option value="36">--Xiaomi
-                        </option>
-                        <option style="background: #EEEEEE" value="28">Máy tính bản
-                        </option>
-                        <option value="33">--Apple
-                        </option>
-                        <option value="34">--SamSung
-                        </option>
-                        <option style="background: #EEEEEE" value="29">Phụ kiện
-                        </option>
-                        <option value="35">--Đế tản nhiệt laptop
-                        </option>
-                        <option value="37">--Bàn phím
-                        </option>
-                        <option style="background: #EEEEEE" value="31">Tai nghe + Loa
-                        </option>
-                        <option style="background: #EEEEEE" value="39">Máy tinh bàn (PC)
-                        </option>
-                        <option style="background: #EEEEEE" value="46">Máy tính bàn
-                        </option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="title" for="">Trạng thái (*)</label>
-                    <div class="d-flex">
-                        <div class="col-sm-4 form-check">
-                            <input class="form-check-input" id="status-pending" name="status" type="radio"
-                                value="pending">
-                            <label for="status-pending" class="form-check-label">Chờ duyệt</label>
-                        </div>
-                        <div class="col-sm-4 form-check">
-                            <input class="form-check-input" id="status-public" name="status" type="radio"
-                                value="public">
-                            <label for="status-public" class="form-check-label">Công khai</label>
+                <div class="modal-body">
+                    <div class="form-group">
+                        {!! Form::label('name', 'Tên danh mục (*)', ['class' => 'title']) !!}
+                        {!! Form::text('name', null, ['class' => 'form-control','id' => 'name_update', 'placeholder' =>
+                        'Tên
+                        danh mục']) !!}
+                    </div>
+                    <div class="form-group">
+                        {!! Form::label('slug_modal', 'Slug (*)', ['class' => 'title']) !!}
+                        {!! Form::text('slug', null, ['class' => 'form-control','id' => 'slug_update', 'placeholder' =>
+                        'Slug']) !!}
+                    </div>
+                    <div class="form-group">
+                        {!! Form::label('parent_category', 'Danh mục cha', ['class' => 'title']) !!}
+                        {!! Form::select('parent_category', collect($categoryOptions)->mapWithKeys(function ($value) {
+                        return [$value['id'] => str_repeat('➻❥ ',$value['lever']).$value['name']];
+                        }), '' , ['class' => 'form-control mr-1', 'id' => 'select_update']) !!}
+                    </div>
+                    <div class="form-group">
+                        {!! Form::label('', 'Trạng thái (*)', ['class' => 'title']) !!}
+                        <div class="d-flex">
+                            <div class="col-sm-4 form-check">
+                                {!! Form::radio('status', 0, '', ['id' => 'status-pending', 'class' =>
+                                'form-check-input']) !!}
+                                {!! Form::label('status-pending', 'Chờ duyệt', ['class' => 'form-check-label']) !!}
+                            </div>
+                            <div class="col-sm-4 form-check">
+                                {!! Form::radio('status', 1, '', ['id' => 'status-public', 'class' =>
+                                'form-check-input']) !!}
+                                {!! Form::label('status-public', 'Công khai', ['class' => 'form-check-label']) !!}
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-12 form-group">
-                        <label for="user_create" class="title">Người tạo</label>
-                        <input id="user_create" class="form-control" placeholder="Người tạo" disabled="disabled"
-                            name="user" type="text" value="">
+                    <div class="row">
+                        <div class="col-sm-12 form-group">
+                            {!! Form::label('creator', 'Người tạo', ['class' => 'title']) !!}
+                            {!! Form::text('creator', null, ['class' => 'form-control','id' => 'creator' ,'placeholder'
+                            => 'Người tạo',
+                            'disabled' => 'disabled']) !!}
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-6 form-group">
-                        <label for="create_at" class="title">Ngày tạo</label>
-                        <input id="create_at" class="form-control" placeholder="Ngày tạo" disabled="disabled"
-                            name="create_at" type="text" value="">
+                    <div class="row">
+                        <div class="col-sm-6 form-group">
+                            {!! Form::label('created_at', 'Ngày tạo', ['class' => 'title']) !!}
+                            {!! Form::text('created_at', null, ['class' => 'form-control','id' => 'created_at',
+                            'placeholder' => 'Ngày tạo',
+                            'disabled' => 'disabled']) !!}
+                        </div>
+                        <div class="col-sm-6 form-group">
+                            {!! Form::label('updated_at', 'Cập nhật gần nhất', ['class' => 'title']) !!}
+                            {!! Form::text('updated_at', null, ['class' => 'form-control','id' => 'updated_at',
+                            'placeholder' => 'Cập nhật gần
+                            nhất', 'disabled' => 'disabled']) !!}
+                        </div>
                     </div>
-                    <div class="col-sm-6 form-group">
-                        <label for="update_at" class="title">Cập nhật gần nhất</label>
-                        <input id="update_at" class="form-control" placeholder="Người tạo" disabled="disabled"
-                            name="update_at" type="text" value="">
-                    </div>
+
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
-                <button type="button" class="btn btn-success">Cập nhật</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
+                    <input type="submit" class="btn btn-success" value="Cập nhật">
+                </div>
             </div>
         </div>
     </div>
-</div>
+</form>
+
+<script>
+    function cat_update(id) {
+    var data = {
+        id: id,
+        _token: '{{ csrf_token() }}'
+    };
+    
+    $.ajax({
+        url: "cat/edit/" + id,
+        method: "POST",
+        data: data,
+        dataType: "json",
+        success: function(data) {
+            $("#id_update").attr("action", "cat/update/" + data.id);
+            $("#name_update").val(data.name);
+            $("#slug_update").val(data.slug);
+            $("#select_update").val(data.parent_id);
+            
+            if (data.status == 0) {
+                $('#status-pending').prop('checked', true);
+            } else if (data.status == 1) {
+                $('#status-public').prop('checked', true);
+            }
+            
+            $("#creator").val(data.creator);
+            
+            var createdAt = new Date(data.created_at);
+            var formattedCreatedAt = createdAt.toLocaleString("en-US", { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            
+            var updatedAt = new Date(data.updated_at);
+            var formattedUpdatedAt = updatedAt.toLocaleString("en-US", { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            
+            $("#created_at").val(formattedCreatedAt);
+            $("#updated_at").val(formattedUpdatedAt);
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            alert(xhr.status);
+            alert(thrownError);
+        },
+    });
+}
+
+$(document).ready(function() {
+    $(".btn-edit").click(function() {
+        var id = $(this).attr("data-id");
+        cat_update(id);
+    });
+});
+
+</script>
 @endsection

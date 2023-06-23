@@ -35,10 +35,27 @@
                     true,'size' => 8]) !!}
                 </div>
 
+                <div class="form-group">
+                    <label for="created_at">Ngày tạo</label>
+                    <input class="form-control" type="text" name="created_at" id="created_at"
+                        value="{{$user -> created_at}}" disabled>
+                    @error('created_at')
+                    <small class="text-danger">{{$message}}</small>
+                    @enderror
+                </div>
+                <div class="form-group">
+                    <label for="updated_at">Cập nhật mới nhất</label>
+                    <input class="form-control" type="text" name="updated_at" id="updated_at"
+                        value="{{$user -> updated_at}}" disabled>
+                    @error('updated_at')
+                    <small class="text-danger">{{$message}}</small>
+                    @enderror
+                </div>
 
                 <button type="submit" value="Cập nhật" name="btn-add" class="btn btn-success">Cập nhật</button>
             </form>
         </div>
     </div>
 </div>
+
 @endsection()

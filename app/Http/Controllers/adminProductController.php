@@ -9,6 +9,7 @@ use App\Color;
 use App\Config;
 use App\Product;
 use App\Cat_product;
+use App\User;
 
 class adminProductController extends Controller
 {
@@ -19,6 +20,25 @@ class adminProductController extends Controller
             return $next($request);
         });
     }
+
+    function data_tree($data, $parent_id = 0, $lever = 0)
+    {
+        $result = array();
+        foreach ($data as $v) {
+            if ($v['parent_id'] == $parent_id) {
+                $v['lever'] = $lever;
+                $result[] = $v;
+                foreach ($data as $item) {
+                    if ($item['parent_id'] == $v['id']) {
+                        $result_child = $this->data_tree($data, $v['id'], $lever + 1);
+                        $result = array_merge($result, $result_child);
+                    }
+                }
+            }
+        }
+        return $result;
+    }
+
     function list()
     {
 
@@ -77,27 +97,11 @@ class adminProductController extends Controller
 
     function category()
     {
-        function data_tree($data, $parent_id = 0, $lever = 0)
-        {
-            $result = array();
-            foreach ($data as $v) {
-                if ($v['parent_id'] == $parent_id) {
-                    $v['lever'] = $lever;
-                    $result[] = $v;
-                    foreach ($data as $item) {
-                        if ($item['parent_id'] == $v['id']) {
-                            $result_child = data_tree($data, $v['id'], $lever + 1);
-                            $result = array_merge($result, $result_child);
-                        }
-                    }
-                }
-            }
-            return $result;
-        }
+
 
 
         $categories = Cat_product::all();
-        $categoryOptions = data_tree($categories);
+        $categoryOptions = $this->data_tree($categories);
         // return dd($categories->toArray());
 
         return view('admin.product.cat', compact('categoryOptions'));
@@ -131,8 +135,40 @@ class adminProductController extends Controller
         return redirect('admin/product/cat')->with('status', '▶Đã thêm danh mục thành công!');
     }
 
+    function cat_edit(Cat_product $cat)
+    {
 
+        $categories = Cat_product::all();
+        $categoryOptions = $this->data_tree($categories);
+        $creator = getFieldbyID(User::class, 'name', $cat->creator);
+        $data = array(
+            'id' => $cat->id,
+            'name' => $cat->name,
+            'slug' => $cat->slug,
+            'parent_id' => $cat->parent_id,
+            'status' => $cat->status,
+            'creator' => $creator,
+            'dataTree' => $categoryOptions,
+            'created_at' => $cat->created_at,
+            'updated_at' => $cat->updated_at,
+        );
+        echo json_encode($data);
+    }
 
+    function cat_update(Request $request, Cat_product $cat)
+    {
+        $parentId = $request->input('parent_category') ?  $request->input('parent_category') : 0;
+
+        $cat->update([
+            'name' => $request->input('name'),
+            'slug' => Str::slug($request->input('name')),
+            'parent_id' => $parentId,
+            'status' => $request->input('status'),
+        ]);
+
+        return redirect('admin/product/cat')->with('status', '▶Cập nhật thành công!');
+        // return response()->json(['status' => 'success', 'message' => 'Product updated successfully']);
+    }
 
     function cat_delete(Cat_product $cat)
     {
@@ -154,8 +190,18 @@ class adminProductController extends Controller
 
     function edit(Color $color)
     {
-        $colors = Color::all();
-        return view('admin.product.color_edit', compact('colors', 'color'));
+        $creator = getFieldbyID(User::class, 'name', $color->creator);
+        $data = array(
+            'id' => $color->id,
+            'name' => $color->name,
+            'slug' => $color->slug,
+            'code' => $color->code,
+            'creator' => $creator,
+            'status' => $color->status,
+            'created_at' => $color->created_at,
+            'updated_at' => $color->updated_at,
+        );
+        echo json_encode($data);
     }
 
     function color_add(Request $request)
@@ -180,6 +226,7 @@ class adminProductController extends Controller
             'name' => $request->input('name'),
             'slug' => $request->input('slug'),
             'code' => $request->input('code'),
+            'creator' => session('userID'),
             'status' => $request->input('status'),
         ]);
         // return dd($request->input());
@@ -189,6 +236,21 @@ class adminProductController extends Controller
 
     function color_update(Request $request, Color $color)
     {
+        $request->validate(
+            [
+                'name' => ['required', 'string', 'max:255', 'unique:colors,name,' . $color->id],
+                'slug' => ['required', 'string', 'max:20'],
+            ],
+            [
+                'required' => ':attribute không được để trống!',
+                'max' => ':attribute có độ dài lớn nhất :max ký tự',
+                'unique' => ':attribute đã tồn tại trong cơ sở dữ liệu!',
+            ],
+            [
+                'name' => 'Màu sắc',
+                'slug' => 'Slug',
+            ]
+        );
         $color->update([
             'name' => $request->input('name'),
             'slug' => $request->input('slug'),
@@ -228,6 +290,7 @@ class adminProductController extends Controller
         Config::create([
             'name' => $request->input('name'),
             'memory' => $request->input('storage'),
+            'creator' => session('userID'),
             'price' => $request->input('price'),
             'status' => $request->input('status')
         ]);
@@ -236,8 +299,18 @@ class adminProductController extends Controller
 
     function config_edit(Config $config)
     {
-        $configs = Config::all();
-        return view('admin.product.config_edit', compact('config', 'configs'));
+        $creator = getFieldbyID(User::class, 'name', $config->creator);
+        $data = array(
+            'id' => $config->id,
+            'name' => $config->name,
+            'price' => $config->price,
+            'storage' => $config->memory,
+            'creator' => $creator,
+            'status' => $config->status,
+            'created_at' => $config->created_at,
+            'updated_at' => $config->updated_at,
+        );
+        echo json_encode($data);
     }
 
     function config_update(Request $request, Config $config)

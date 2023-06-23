@@ -98,36 +98,46 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-2">
-                    <b>Ảnh đại diện SP (1 ảnh)</b>
-                    <div class="form-group">
-                        <div id="myDropzone1" class="dropzone">
+                <div class="col-md-3">
+                    <label for="formFile" class="form-label"><b>Ảnh đại diện SP (1 ảnh)</b></label>
+                    <input type="file" name="file_upload" id="file_upload" class="" onchange="chooseFile(this)">
+                    <img src="{{asset('images/img-thumb.png')}}" alt="" id="image" class="img-rounded my-2" width="160"
+                        height="160">
+                </div>
+                <div class="col-md-3">
+                    <label for="formFile" class="form-label"><b>Ảnh chi tiết SP (1-6 ảnh)</b></label>
+                    <input type="file" name="files[]" id="file-uploads" class="" multiple>
+                    <br>
+                    <div class="col-md-11 p-0 my-1">
+                        <div id="images">
+                            <span><img src="{{asset('images/img-product.png')}}" class="img m-1 img-rounded"
+                                    width=""></span>
+                            <span><img src="{{asset('images/img-product.png')}}" class="img m-1 img-rounded"
+                                    width=""></span>
+
+                            <span><img src="{{asset('images/img-product.png')}}" class="img m-1 img-rounded"
+                                    width=""></span>
+                            <span><img src="{{asset('images/img-product.png')}}" class="img m-1 img-rounded"
+                                    width=""></span>
                         </div>
                     </div>
                 </div>
-                {{-- <div class="col-md-4">
-                    <b>Ảnh chi tiết SP (1-6 ảnh)</b>
-                    <div class="form-group">
-                        <div id="myDropzone2" class="dropzone">
-                        </div>
-                    </div>
-                </div> --}}
             </div>
         </div>
         <div class="col-md-12">
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-8">
                     <div class="form-group">
                         {!! Form::label('des_quick', 'Mô tả nhanh',['class' => 'font-weight-bold']) !!}
                         {!! Form::textarea('des_quick', old('des_quick'), ['class' => 'form-control' , 'id' =>
-                        'amount','rows' => '5']) !!}
+                        'textarea','rows' => '5']) !!}
                     </div>
                 </div>
             </div>
             <div class="form-group">
                 {!! Form::label('des_detail', 'Mô tả chi tiết sản phẩm',['class' => 'font-weight-bold']) !!}
                 {!! Form::textarea('des_detail', old('des_detail'), ['class' => 'form-control' , 'id' =>
-                'amount','rows' => '10']) !!}
+                'textarea','rows' => '10']) !!}
             </div>
             <div class="form-group">
                 {!! Form::select('cat', [1=>'Danh mục 1',2=>'Danh mục 2'], '', ['class' => 'form-control' , 'id' =>
@@ -153,30 +163,6 @@
             {!! Form::close() !!}
         </div>
     </div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
-
-    <script>
-        Dropzone.autoDiscover = false;
-var myDropzone = new Dropzone("#myDropzone1", {
-    url: "{{route('dropzonejs.add')}}", // Đường dẫn đến server để xử lý tải lên ảnh
-    acceptedFiles: "image/*", // Chỉ chấp nhận tệp tin ảnh
-    maxFilesize: 2, // Giới hạn dung lượng tệp tin (đơn vị: MB)
-    addRemoveLinks: true, // Hiển thị nút xóa để loại bỏ ảnh đã tải lên
-    dictRemoveFile: "Xóa", // Chuỗi hiển thị trên nút xóa
-    success: function(file, response) {
-        // Xử lý khi tải lên thành công
-        // response chứa thông tin về tệp đã tải lên từ phía server (nếu cần)
-        console.log(response);
-    }
-
-        // Gọi Ajax để xử lý tệp đã tải lên
-        
-});
-
-
-    </script>
-
 
     <script>
         function count() {
@@ -191,4 +177,5 @@ var myDropzone = new Dropzone("#myDropzone1", {
                                         }
                                     }
     </script>
+
     @endsection
