@@ -61,7 +61,7 @@ class adminUserController extends Controller
 
     public function delete($id)
     {
-        if (session('userID') != $id) {
+        if (session('userId') != $id) {
             User::find($id)->delete();
             return redirect('admin/user/list')->with([
                 'status' => 'Đã xóa tài khoản thành công!',
@@ -139,7 +139,7 @@ class adminUserController extends Controller
         $list_check = $request->input('list_check');
         if ($list_check) {
             foreach ($list_check as $k => $v) {
-                if (Auth::id() ==  $v) {
+                if (session('userID') ==  $v) {
                     unset($list_check[$k]);
                 }
             }

@@ -22,6 +22,14 @@
                         @enderror
                     </div>
                     <div class="form-group">
+                        <label for="slug"> Slug(*) <small class="text-success"><b class="autofill-trigger">[Tự động
+                                    điền]</b></small></label>
+                        {!! Form::text('slug', old('slug'), ['class' => 'form-control', 'id' => 'slug']) !!}
+                        @error('slug')
+                        <small class="text-danger">{{$message}}</small>
+                        @enderror
+                    </div>
+                    <div class="form-group">
                         {{ Form::label('storage', 'Khả năng lưu trữ') }}
                         {!! Form::text('storage', old('storage'), ['class' => 'form-control', 'id' => 'storage']) !!}
                         @error('storage')
@@ -66,8 +74,8 @@
                                 <th scope="col">#</th>
                                 <th scope="col">Tên</th>
                                 <th scope="col">Dung lượng</th>
-                                <th scope="col">Giá</th>
                                 <th scope="col">Trạng thái</th>
+                                <th scope="col">Cập nhật gần nhất</th>
                                 <th scope="col">Tác vụ</th>
                             </tr>
                         </thead>
@@ -80,19 +88,19 @@
                                 <th scope="row">{{++$i}}</th>
                                 <td>{{Str::limit($config -> name,20)}}</td>
                                 <td>{{$config -> memory ."GB"}}</td>
-                                <td>{{number_format($config -> price,0,'.','.').'đ'}}</td>
                                 @if ($config -> status == 0)
                                 <td><span class="text-badge badge badge-warning">Chờ duyệt</span></td>
                                 @else
                                 <td><span class="text-badge badge badge-success">Công khai</span></td>
                                 @endif
+                                <td>{{$config -> updated_at}}</td>
                                 <td>
                                     <a data-toggle="modal" data-id="{{ $config->id }}" data-target="#exampleModalCenter"
                                         class="btn btn-success btn-edit btn-sm rounded-0 text-white" type="button"
                                         data-toggle="tooltip" data-placement="top" title="Edit"><i
                                             class="fa fa-edit"></i></a>
                                     <a href="{{url('admin/product/config/delete/'.$config -> id)}}"
-                                        onclick="return confirm('Bạn có chắc chắn muốn xóa admin này?')"
+                                        onclick="return confirm('Bạn có chắc chắn muốn xóa cấu hình này?')"
                                         class="btn btn-danger btn-sm rounded-0 text-white" type="button"
                                         data-toggle="tooltip" data-placement="top" title="Delete"><i
                                             class="fa fa-trash"></i>

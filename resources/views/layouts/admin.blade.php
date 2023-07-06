@@ -4,11 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="https://www.hdtgroup.vn/images/resort-icon.png">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/solid.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
     <script src="https://code.jquery.com/jquery-3.6.1.js"
         integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
     <script src="https://cdn.tiny.cloud/1/9zvlmm63vtiuu9i3wnr44t7ploxgrkb6fclj3ilmsfqvi1c4/tinymce/4/tinymce.min.js"
@@ -16,14 +16,15 @@
     <script>
         var editor_config = {
               path_absolute : "http://localhost/LaravelPro/TQStore/",
-              selector: "textarea",
+              selector: "textarea.edit",
+              
               plugins: [
                 "advlist autolink lists link image charmap print preview hr anchor pagebreak",
                 "searchreplace wordcount visualblocks visualchars code fullscreen",
                 "insertdatetime media nonbreaking save table contextmenu directionality",
-                "emoticons template paste textcolor colorpicker textpattern"
+                "emoticons template paste textcolor colorpicker textpattern textcolor colorpicker"
               ],
-              toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media",
+              toolbar: "fontselect | formatselect |forecolor backcolor |insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media",
               relative_urls: false,
               file_browser_callback : function(field_name, url, type, win) {
                 var x = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth;
@@ -66,9 +67,13 @@
                         <i class="plus-icon fas fa-plus-circle"></i>
                     </button>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="{{url('admin/page/add')}}">Thêm bài viết</a>
-                        <a class="dropdown-item" href="{{url('admin/product/add')}}">Thêm sản phẩm</a>
-                        <a class="dropdown-item" href="{{url('admin/user/add')}}">Thêm quản trị</a>
+                        <a class="dropdown-item" href="{{route('admin.page.add')}}">Thêm trang</a>
+                        <a class="dropdown-item" href="">Thêm bài viết</a>
+                        <a class="dropdown-item" href="{{route('product.add')}}">Thêm sản phẩm</a>
+                        <a class="dropdown-item" href="{{route('admin.banner.add')}}">Thêm banner</a>
+                        <a class="dropdown-item" href="{{route('admin.slider.add')}}">Thêm slider</a>
+                        <a class="dropdown-item" href="{{route('admin.user.add')}}">Thêm quản trị</a>
+                        <a class="dropdown-item" href="{{route('admin.role.add')}}">Thêm quyền</a>
                     </div>
                 </div>
                 <div class="btn-group">
@@ -96,8 +101,8 @@
                         </a>
                         <i class="arrow fas fa-angle-right"></i>
                     </li>
-                    <li class="nav-link">
-                        <a href="{{url('admin/page/list')}}">
+                    <li class="nav-link {{session('module_active')== 'page'?'active':''}}">
+                        <a href="{{route('admin.page.show')}}">
                             <div class="nav-link-icon d-inline-flex">
                                 <i class="far fa-folder"></i>
                             </div>
@@ -107,10 +112,10 @@
 
                         <ul class="sub-menu">
                             <li><a href="{{url('admin/page/add')}}">Thêm mới</a></li>
-                            <li><a href="{{url('admin/page/list')}}">Danh sách trang</a></li>
+                            <li><a href="{{route('admin.page.show')}}">Danh sách trang</a></li>
                         </ul>
                     </li>
-                    <li class="nav-link">
+                    <li class="nav-link {{session('module_active')=='blog' ?'active':''}}">
                         <a href="{{url('admin/post/list')}}">
                             <div class="nav-link-icon d-inline-flex">
                                 <i class="far fa-folder"></i>
@@ -141,7 +146,7 @@
                             <li><a href="{{url('admin/product/config')}}">Cấu hình</a></li>
                         </ul>
                     </li>
-                    <li class="nav-link">
+                    <li class="nav-link {{session('module_active')== 'order'?'active':''}}">
                         <a href="{{url('admin/order/list')}}">
                             <div class="nav-link-icon d-inline-flex">
                                 <i class="far fa-folder"></i>
@@ -152,6 +157,32 @@
                         <ul class="sub-menu">
                             <li><a href="{{url('admin/order/list')}}">Danh sách đơn hàng</a></li>
                             <li><a href="{{url('admin/guest/list')}}">Khách hàng thân thiết</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-link {{session('module_active')== 'banner'?'active':''}} ">
+                        <a href="{{url('admin/banner/list')}}">
+                            <div class="nav-link-icon d-inline-flex">
+                                <i class="far fa-folder"></i>
+                            </div>
+                            Banner
+                        </a>
+                        <i class="arrow fas fa-angle-right"></i>
+                        <ul class="sub-menu">
+                            <li><a href="{{url('admin/banner/add')}}">Thêm mới</a></li>
+                            <li><a href="{{url('admin/banner/list')}}">Danh sách</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-link {{session('module_active')== 'slider'?'active':''}}">
+                        <a href="{{url('admin/slider/list')}}">
+                            <div class="nav-link-icon d-inline-flex">
+                                <i class="far fa-folder"></i>
+                            </div>
+                            Slider
+                        </a>
+                        <i class="arrow fas fa-angle-right"></i>
+                        <ul class="sub-menu">
+                            <li><a href="{{url('admin/slider/add')}}">Thêm mới</a></li>
+                            <li><a href="{{url('admin/slider/list')}}">Danh sách</a></li>
                         </ul>
                     </li>
                     @if(\App\Helpers\PermissionHelper::hasPermission(['user.add', 'user.view']))

@@ -27,7 +27,7 @@ class adminRoleController extends Controller
         $permissions = Permission::all()->groupBy(function ($permission) {
             return explode('.', $permission->slug)[0];
         });
-        // return dd($permissions->toArray());
+        // return dd(Permission::all()->toArray());
         return view('admin.role.add-role', compact('permissions'));
     }
 
@@ -51,7 +51,7 @@ class adminRoleController extends Controller
                 'description' => 'Mô tả'
             ]
         );
-        // return dd($request->input('id'));
+        // return dd($request->input());
 
         $role = Role::create([
             'name' => $request->input('name'),

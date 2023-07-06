@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Permission;
 
-class PermissionController extends Controller
+class adminPermissionController extends Controller
 {
 
     function __construct()
@@ -30,7 +30,7 @@ class PermissionController extends Controller
             return explode('.', $permission->slug)[0];
         });
         // dd($permission);
-        // $this->show_array($permission);
+        // return dd($permission);
 
         return view('admin.permission.add', compact('permission'));
     }

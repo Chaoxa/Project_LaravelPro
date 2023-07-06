@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Response;
+use Illuminate\Support\MessageBag;
 
 class adminAuthController extends Controller
 {
@@ -33,6 +35,7 @@ class adminAuthController extends Controller
 
     function handle(Request $request)
     {
+        // dd($request->input());
         $request->validate(
             [
                 'username' => ['required', 'string', 'min:6'],
@@ -50,15 +53,7 @@ class adminAuthController extends Controller
 
         $username = $request->input('username');
         $password = $request->input('password');
-        // $users = User::all();
-        // foreach ($users as $user) {
-        //     if ($user->username == $username) {
-        //         $array[] = $user->username;
-        //     } else {
-        //         $array[] = '';
-        //     }
-        // }
-        // return $array;
+
         if ($userID = $this->check_login($username, $password)) {
             $userData = [
                 'is_login' => true,
@@ -66,10 +61,16 @@ class adminAuthController extends Controller
                 'userID' => $userID
             ];
 
+            if ($request->input('remember_me')) {
+                $response = new Response();
+                $response->cookie('is_login', true, 60);
+                $response->cookie('user_login', $username, 60);
+            }
+
             session()->put($userData);
 
             return redirect('admin/dashboard');
         }
-        return 'Tài khoản hoặc mật khẩu không chính xác';
+        return redirect()->back()->withErrors(new MessageBag(['password' => 'Tài khoản hoặc mật khẩu không chính xác!']));
     }
 }

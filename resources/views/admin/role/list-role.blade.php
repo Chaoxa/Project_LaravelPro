@@ -50,14 +50,14 @@
                         </td>
                         <td scope="row">{{$i++}}</td>
                         <td><a href="{{url('admin/role/edit/'.$role->id)}}">{{$role->name}}</a></td>
-                        <td>{{$role->description}}</td>
+                        <td>{!!$role->description!!}</td>
                         <td>{{$role->created_at}}</td>
                         <td>
                             <a href="{{url('admin/role/edit/'.$role->id)}}"
                                 class="btn btn-success btn-sm rounded-0 text-white" type="button" data-toggle="tooltip"
                                 data-placement="top" title="Edit"><i class="fa fa-edit"></i></a>
                             <a href="{{url('admin/role/delete/'.$role -> id)}}"
-                                onclick="return confirm('Bạn có chắc chắn muốn xóa admin này?')"
+                                onclick="return confirm('Bạn có chắc chắn muốn xóa quyền này?')"
                                 class="btn btn-danger btn-sm rounded-0 text-white" type="button" data-toggle="tooltip"
                                 data-placement="top" title="Delete"><i class="fa fa-trash"></i>
                             </a>

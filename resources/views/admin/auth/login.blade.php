@@ -31,9 +31,10 @@
         @error('password')
         <small class="text-danger">{{$message}}</small>
         @enderror
+
         <div class="form-grou">
-            {!! Form::checkbox('remember_me', '', '', ['id' => 'checkbox']) !!}
-            {!! Form::label('remember_me', 'Nhớ đăng nhập', ['class' => 'remember']) !!}
+            {!! Form::checkbox('remember_me', true, '', ['id' => 'remember_me']) !!}
+            {!! Form::label('remember_me', 'Nhớ đăng nhập', ['class' => 'remember m-0']) !!}
         </div>
         {!! Form::submit('Đăng nhập', ['class' => 'form-submit mb-2','name' => 'btn-submit']) !!}
         <div class="support d-flex justify-content-between mt-2">

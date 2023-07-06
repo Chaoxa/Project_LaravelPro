@@ -5,7 +5,9 @@ namespace App\Providers;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Gate as FacadesGate;
 use Illuminate\Support\ServiceProvider;
-use App\User;
+use App\Page;
+use Illuminate\Support\Facades\View;
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,7 +26,12 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
+
     public function boot()
     {
+        View::composer('layouts.client', function ($view) {
+            $headerData = Page::where('status', 1)->get();
+            $view->with('dataHeader', $headerData);
+        });
     }
 }

@@ -6,20 +6,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="https://www.hdtgroup.vn/images/resort-icon.png">
-    <link href="public/client/css/bootstrap/bootstrap-theme.min.css" rel="stylesheet" type="text/css" />
-    <link href="public/client/css/bootstrap/bootstrap.min.css" rel="stylesheet" type="text/css" />
-    <link href="public/client/reset.css" rel="stylesheet" type="text/css" />
-    <link href="public/client/css/carousel/owl.carousel.css" rel="stylesheet" type="text/css" />
-    <link href="public/client/css/carousel/owl.theme.css" rel="stylesheet" type="text/css" />
-    <link href="public/client/css/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
-    <link href="public/client/style.css" rel="stylesheet" type="text/css" />
-    <link href="public/client/responsive.css" rel="stylesheet" type="text/css" />
+    <link href="{{asset('client/css/bootstrap/bootstrap-theme.min.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{asset('client/css/bootstrap/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{asset('client/reset.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{asset('client/css/carousel/owl.carousel.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{asset('client/css/carousel/owl.theme.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{asset('client/css/font-awesome/css/font-awesome.min.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{asset('client/css/font-awesome/css/font-awesome.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{asset('client/style.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{asset('client/responsive.css')}}" rel="stylesheet" type="text/css" />
 
-    <script src="public/client/js/jquery-2.2.4.min.js" type="text/javascript"></script>
-    <script src="public/client/js/elevatezoom-master/jquery.elevatezoom.js" type="text/javascript"></script>
-    <script src="public/client/js/bootstrap/bootstrap.min.js" type="text/javascript"></script>
-    <script src="public/client/js/carousel/owl.carousel.js" type="text/javascript"></script>
-    <script src="public/client/js/main.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="{{asset('client/js/elevatezoom-master/jquery.elevatezoom.js')}}" type="text/javascript"></script>
+    <script src="{{asset('client/js/bootstrap/bootstrap.min.js')}}" type="text/javascript"></script>
+    <script src="{{asset('client/js/carousel/owl.carousel.js')}}" type="text/javascript"></script>
+    <script src="{{asset('client/js/main.js')}}" type="text/javascript"></script>
 </head>
 
 <body>
@@ -32,48 +36,59 @@
                         <div id="main-menu-wp" class="fl-right">
                             <ul id="main-menu" class="clearfix">
                                 <li>
-                                    <a href="?page=home" title="">Trang chủ</a>
-                                </li>
-                                <li>
-                                    <a href="?page=category_product" title="">Sản phẩm</a>
+                                    <a href="{{route('home')}}" title="">Trang chủ</a>
                                 </li>
                                 <li>
                                     <a href="?page=blog" title="">Blog</a>
                                 </li>
                                 <li>
-                                    <a href="?page=detail_blog" title="">Giới thiệu</a>
+                                    <a href="{{route('client.product.show')}}" title="">Sản phẩm</a>
                                 </li>
+                                @empty(!$dataHeader)
+                                @foreach ($dataHeader as $value)
                                 <li>
-                                    <a href="?page=detail_blog" title="">Liên hệ</a>
+                                    <a href="{{ route('client.page.show', $value->slug) }}" title="">{{
+                                        $value->name}}</a>
                                 </li>
+                                @endforeach
+                                @endempty
                             </ul>
                         </div>
                     </div>
                 </div>
                 <div id="head-body" class="clearfix">
                     <div class="wp-inner">
-                        <a href="?page=home" title="" id="logo" class="fl-left"><img
-                                src="public/client/images/logo.png" /></a>
+                        <a href="{{url('trang-chu')}}" title="" id="logo" class="fl-left">
+                            <h1 class="d-block"><b class="text-danger">TQ</b> <b class="text-primary">Store</b></h1>
+                        </a>
                         <div id="search-wp" class="fl-left">
-                            <form method="POST" action="">
-                                <input type="text" name="s" id="s" placeholder="Nhập từ khóa tìm kiếm tại đây!">
-                                <button type="submit" id="sm-s">Tìm kiếm</button>
+                            <form method="POST" action="" class="d-flex">
+                                <input type="text" placeholder="Bạn muốn tìm gì?" id="s" class="form-control mr-1">
+                                <button type="submit" class="btn btn-dark">Tìm
+                                    kiếm</button>
                             </form>
                         </div>
                         <div id="action-wp" class="fl-right">
-                            <div id="advisory-wp" class="fl-left">
-                                <span class="title">Tư vấn</span>
-                                <span class="phone">0987.654.321</span>
+                            <div id="advisory-wp" class="fl-left d-flex">
+                                <img src="https://media1.giphy.com/media/mbW2nvTE0TUc5IgRMm/giphy.gif?cid=6c09b952zt437d67rjkizo3c18jt9vkq7zt9blk1l5bx6wxs&rid=giphy.gif&ct=s"
+                                    alt="" width="50px">
+                                <div class="icon-phone"></div>
+                                <div class="contact">
+                                    <span class="title">Tư vấn (Quý)</span>
+                                    <span class="phone">0375.284.572</span>
+                                </div>
                             </div>
                             <div id="btn-respon" class="fl-right"><i class="fa fa-bars" aria-hidden="true"></i></div>
-                            <a href="?page=cart" title="giỏ hàng" id="cart-respon-wp" class="fl-right">
+                            <a href="{{route('client.cart.show')}}" title="giỏ hàng" id="cart-respon-wp"
+                                class="fl-right">
                                 <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                                 <span id="num">2</span>
                             </a>
                             <div id="cart-wp" class="fl-right">
                                 <div id="btn-cart">
-                                    <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                                    <span id="num">2</span>
+                                    <a href="{{route('client.cart.show')}}" class="text-white"><i
+                                            class="fa fa-shopping-cart" aria-hidden="true"></i>
+                                        <span id="num">2</span></a>
                                 </div>
                                 <div id="dropdown">
                                     <p class="desc">Có <span>2 sản phẩm</span> trong giỏ hàng</p>
@@ -121,12 +136,21 @@
                 <div id="foot-body">
                     <div class="wp-inner clearfix">
                         <div class="block" id="info-company">
-                            <h3 class="title">ISMART</h3>
-                            <p class="desc">ISMART luôn cung cấp luôn là sản phẩm chính hãng có thông tin rõ ràng, chính
-                                sách ưu đãi cực lớn cho khách hàng có thẻ thành viên.</p>
-                            <div id="payment">
-                                <div class="thumb">
-                                    <img src="public/images/img-foot.png" alt="">
+                            <div class="row">
+                                <a href="{{url('trang-chu')}}" title="" id="logo" class="fl-left">
+                                    <h1 class="d-block"><b class="text-danger">TQ</b> <b class="text-primary">Store</b>
+                                    </h1>
+                                </a>
+                            </div>
+                            <div class="row mr-2">
+                                <p class="desc">TQ Store luôn cung cấp luôn là sản phẩm chính hãng có thông tin rõ
+                                    ràng,
+                                    chính
+                                    sách ưu đãi cực lớn cho khách hàng có thẻ thành viên.</p>
+                                <div id="payment">
+                                    <div class="thumb">
+                                        <img src="{{asset('client/images/img-foot.png')}}" alt="">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -137,10 +161,10 @@
                                     <p>106 - Trần Bình - Cầu Giấy - Hà Nội</p>
                                 </li>
                                 <li>
-                                    <p>0987.654.321 - 0989.989.989</p>
+                                    <p>0375.284.572 - 0989.989.989</p>
                                 </li>
                                 <li>
-                                    <p>vshop@gmail.com</p>
+                                    <p>tranquy159@gmail.com</p>
                                 </li>
                             </ul>
                         </div>
@@ -165,7 +189,7 @@
                             <h3 class="title">Bảng tin</h3>
                             <p class="desc">Đăng ký với chung tôi để nhận được thông tin ưu đãi sớm nhất</p>
                             <div id="form-reg">
-                                <form method="POST" action="">
+                                <form>
                                     <input type="email" name="email" id="email" placeholder="Nhập email tại đây">
                                     <button type="submit" id="sm-reg">Đăng ký</button>
                                 </form>
@@ -227,7 +251,7 @@
                 </ul>
             </div>
         </div>
-        <div id="btn-top"><img src="public/images/icon-to-top.png" alt="" /></div>
+        <div id="btn-top"><img src="{{asset('client/images/icon-to-top.png')}}" alt="error" /></div>
         <div id="fb-root"></div>
         <script>
             (function (d, s, id) {
@@ -239,6 +263,10 @@
                     js.src = "//connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v2.8&appId=849340975164592";
                     fjs.parentNode.insertBefore(js, fjs);
                 }(document, 'script', 'facebook-jssdk'));
+        </script>
+
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
         </script>
 </body>
 

@@ -84,7 +84,7 @@
                             <tr>
                                 <th scope="row">{{++$i}}</th>
                                 <td>{{$color -> name}}</td>
-                                <td> <label for="{{$color->id}}" class="box-color my-0"
+                                <td> <label for="{{$color->id}}" class="box-color-lable my-0"
                                         style="background:{{$color->code}}"></label>
                                 </td>
                                 @if ($color -> status == 0)
@@ -98,8 +98,8 @@
                                         class="btn btn-success btn-edit btn-sm rounded-0 text-white" type="button"
                                         data-toggle="tooltip" data-placement="top" title="Edit"><i
                                             class="fa fa-edit"></i></a>
-                                    <a href="{{url('admin/product/col/delete'.$color -> id)}}"
-                                        onclick="return confirm('Bạn có chắc chắn muốn xóa admin này?')"
+                                    <a href="{{url('admin/product/col/delete/'.$color -> id)}}"
+                                        onclick="return confirm('Bạn có chắc chắn muốn xóa màu này?')"
                                         class="btn btn-danger btn-sm rounded-0 text-white" type="button"
                                         data-toggle="tooltip" data-placement="top" title="Delete"><i
                                             class="fa fa-trash"></i>
@@ -116,43 +116,7 @@
 </div>
 <script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI="
     crossorigin="anonymous"></script>
-<script>
-    function ChangeToSlug(str) {
-  var slug = str.toLowerCase();
- 
-    //Đổi ký tự có dấu thành không dấu
-    slug = slug.replace(/á|à|ả|ạ|ã|ă|ắ|ằ|ẳ|ẵ|ặ|â|ấ|ầ|ẩ|ẫ|ậ/gi, 'a');
-    slug = slug.replace(/é|è|ẻ|ẽ|ẹ|ê|ế|ề|ể|ễ|ệ/gi, 'e');
-    slug = slug.replace(/i|í|ì|ỉ|ĩ|ị/gi, 'i');
-    slug = slug.replace(/ó|ò|ỏ|õ|ọ|ô|ố|ồ|ổ|ỗ|ộ|ơ|ớ|ờ|ở|ỡ|ợ/gi, 'o');
-    slug = slug.replace(/ú|ù|ủ|ũ|ụ|ư|ứ|ừ|ử|ữ|ự/gi, 'u');
-    slug = slug.replace(/ý|ỳ|ỷ|ỹ|ỵ/gi, 'y');
-    slug = slug.replace(/đ/gi, 'd');
-    //Xóa các ký tự đặt biệt
-    slug = slug.replace(/\`|\~|\!|\@|\#|\||\$|\%|\^|\&|\*|\(|\)|\+|\=|\,|\.|\/|\?|\>|\<|\'|\"|\:|\;|_/gi, '');
-    //Đổi khoảng trắng thành ký tự gạch ngang
-    slug = slug.replace(/ /gi, "-");
-    //Đổi nhiều ký tự gạch ngang liên tiếp thành 1 ký tự gạch ngang
-    //Phòng trường hợp người nhập vào quá nhiều ký tự trắng
-    slug = slug.replace(/\-\-\-\-\-/gi, '-');
-    slug = slug.replace(/\-\-\-\-/gi, '-');
-    slug = slug.replace(/\-\-\-/gi, '-');
-    slug = slug.replace(/\-\-/gi, '-');
-    //Xóa các ký tự gạch ngang ở đầu và cuối
-    slug = '@' + slug + '@';
-    slug = slug.replace(/\@\-|\-\@|\@/gi, '');
-    //In slug ra textbox có id “slug”
-   return slug;
-}
 
-
-    $(document).ready(function() {
-    $('.autofill-trigger').click(function() {
-        var nameValue = $('#name').val(); 
-        $('#slug').val(ChangeToSlug(nameValue));
-    });
-});
-</script>
 <form method="post" id="id_update">
     @csrf
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
@@ -274,6 +238,7 @@
 }
 
 $(document).ready(function() {
+    // alert('oke')
     $(".btn-edit").click(function() {
         var id = $(this).attr("data-id");
         updateData(id);

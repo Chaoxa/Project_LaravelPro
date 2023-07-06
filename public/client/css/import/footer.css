@@ -1,51 +1,73 @@
 /*FOOTER*/
-#footer-wp #foot-body{ padding: 50px 0px;}
-#footer-wp #foot-body .block{ float: left; width: 25%; padding-left: 30px;}
-#footer-wp #foot-body .block:first-child{ padding-left: 0;}
-#info-company .title{
+#footer-wp #foot-body {
+    padding: 50px 0px;
+}
+#footer-wp #foot-body .block {
+    float: left;
+    width: 25%;
+    padding-left: 30px;
+}
+#footer-wp #foot-body .block:first-child {
+    padding-left: 0;
+}
+#info-company .title {
     font-size: 28px;
-    font-family: 'Roboto Medium';
+    font-family: "Roboto Medium";
     font-weight: normal;
     color: #da1818;
     text-transform: uppercase;
     margin-bottom: 25px;
 }
-#info-company .desc, #newfeed .desc{
-    font-family: 'Roboto Light';
+#info-company .desc,
+#newfeed .desc {
+    font-family: "Roboto Light";
     text-align: justify;
     color: #6d6d6d;
     margin-bottom: 25px;
 }
-.menu-ft .title, #newfeed .title{
+.menu-ft .title,
+#newfeed .title {
     font-size: 20px;
     margin-bottom: 25px;
 }
-.menu-ft .list-item li{ margin-bottom: 10px;}
-.menu-ft .list-item li:last-child{ margin-bottom: 0;}
-.menu-ft .list-item li p{
+.menu-ft .list-item li {
+    margin-bottom: 10px;
+}
+.menu-ft .list-item li:last-child {
+    margin-bottom: 0;
+}
+.menu-ft .list-item li p {
     position: relative;
     color: #000;
-    font-family: 'Roboto Light';
+    font-family: "Roboto Light";
     padding-left: 25px;
 }
-.menu-ft .list-item li:nth-child(1) p:before, .menu-ft .list-item li:nth-child(2) p:before, .menu-ft .list-item li:nth-child(3) p:before{
+.menu-ft .list-item li:nth-child(1) p:before,
+.menu-ft .list-item li:nth-child(2) p:before,
+.menu-ft .list-item li:nth-child(3) p:before {
     position: absolute;
-    font-family: 'FontAwesome';
+    font-family: "FontAwesome";
     top: 0;
     left: 0;
 }
-.menu-ft .list-item li:nth-child(1) p:before{ content: '\f041';}
-.menu-ft .list-item li:nth-child(2) p:before{ content: '\f095';}
-.menu-ft .list-item li:nth-child(3) p:before{ content: '\f0e0';}
-#info-shop .list-item li a{
+.menu-ft .list-item li:nth-child(1) p:before {
+    content: "\f041";
+}
+.menu-ft .list-item li:nth-child(2) p:before {
+    content: "\f095";
+}
+.menu-ft .list-item li:nth-child(3) p:before {
+    content: "\f0e0";
+}
+#info-shop .list-item li a {
     position: relative;
     color: #000;
-    font-family: 'Roboto Light';
+    font-family: "Roboto Light";
     padding-left: 20px;
 }
-#info-shop .list-item li a:before{
+#info-shop .list-item li a:before {
     position: absolute;
-    content: '';
+    content: "";
     top: 50%;
     left: 0;
     width: 5px;
@@ -54,14 +76,14 @@
     background: #da1818;
     transform: translateY(-50%);
 }
-#form-reg #email{
+#form-reg #email {
     display: block;
     width: 100%;
     padding: 6px 10px;
     border: 1px solid #ccc;
     margin-bottom: 10px;
 }
-#form-reg #sm-reg{
+#form-reg #sm-reg {
     display: block;
     width: 100%;
     background: #da1818;
@@ -70,37 +92,50 @@
     padding: 10px 0px;
     text-transform: uppercase;
     color: #fff;
-    font-family: 'Roboto Medium';
+    font-family: "Roboto Medium";
     line-height: normal;
 }
-#form-reg #sm-reg:hover{ background: #c10f0f;}
-::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+#form-reg #sm-reg:hover {
+    background: #c10f0f;
+}
+::-webkit-input-placeholder {
+    /* Chrome/Opera/Safari */
     color: #999;
-    font-family: 'Roboto Light';
+    font-family: "Roboto Light";
     font-size: 13px;
 }
-::-moz-placeholder { /* Firefox 19+ */
+::-moz-placeholder {
+    /* Firefox 19+ */
     color: #999;
-    font-family: 'Roboto Light';
+    font-family: "Roboto Light";
     font-size: 13px;
 }
-:-ms-input-placeholder { /* IE 10+ */
+:-ms-input-placeholder {
+    /* IE 10+ */
     color: #999;
-    font-family: 'Roboto Light';
+    font-family: "Roboto Light";
     font-size: 13px;
 }
-:-moz-placeholder { /* Firefox 18- */
+:-moz-placeholder {
+    /* Firefox 18- */
     color: #999;
-    font-family: 'Roboto Light';
+    font-family: "Roboto Light";
     font-size: 13px;
 }
-#foot-bot{
-    background: #da1818;
+#foot-bot {
+    background: linear-gradient(
+        90deg,
+        rgba(2, 0, 36, 1) 0%,
+        rgba(44, 246, 11, 1) 0%,
+        rgba(4, 206, 244, 1) 77%,
+        rgba(15, 0, 240, 1) 100%
+    );
     text-align: center;
     padding: 10px 0px;
 }
-#foot-bot #copyright{
+#foot-bot #copyright {
     color: #fff;
+    margin: 0px;
     line-height: normal;
-    font-family: 'Roboto Light';
+    font-family: "Roboto Light";
 }

@@ -6,15 +6,11 @@
         <div class="main-content fl-right">
             <div class="section" id="slider-wp">
                 <div class="section-detail">
+                    @foreach ($sliders as $slider)
                     <div class="item">
-                        <img src="public/client/images/slider-01.png" alt="">
+                        <a href="{{$slider->link}}"><img src="{{asset($slider->thumb_slider)}}" alt="error"></a>
                     </div>
-                    <div class="item">
-                        <img src="public/client/images/slider-02.png" alt="">
-                    </div>
-                    <div class="item">
-                        <img src="public/client/images/slider-03.png" alt="">
-                    </div>
+                    @endforeach
                 </div>
             </div>
             <div class="section" id="support-wp">
@@ -58,127 +54,130 @@
                     </ul>
                 </div>
             </div>
+            @if (!empty($featured_products))
             <div class="section" id="feature-product-wp">
                 <div class="section-head">
+                    <style>
+                        .section-title {
+                            background: red;
+                            display: inline-block;
+                            padding: 5px;
+                            color: white;
+                            margin: 20px 20px 10px 3px !important;
+                        }
+
+                        .warning {
+                            color: rgb(13, 0, 255);
+                        }
+                    </style>
                     <h3 class="section-title">Sản phẩm nổi bật</h3>
+                    <script>
+                        var object = document.querySelector('.section-title')
+                setInterval(function() {
+                    object.classList.toggle('warning')
+                }, 300)
+                    </script>
                 </div>
                 <div class="section-detail">
                     <ul class="list-item">
+                        @foreach ($featured_products as $featured_product)
                         <li>
-                            <a href="?page=detail_product" title="" class="thumb">
-                                <img src="public/client/images/img-pro-05.png">
+                            @if ($featured_product['discount'] > 0)
+                            <div class="d-flex justify-content-between" id="discount">
+                                <img src="https://ruoungoaigiasi.vn/image/catalog/san-pham/khuyen-mai.gif" alt=""
+                                    width="60">
+                                <div class="box-discount">
+                                    <img id="bg-percent"
+                                        src="https://www.pngkey.com/png/detail/15-151868_free-download-sale-icon.png"
+                                        alt="" width="30">
+                                    <h2 class="percent">
+                                        <?php echo $featured_product['discount'] . '%' ?>
+                                    </h2>
+                                </div>
+                            </div>
+                            @endif
+                            <a href="{{route('client.product.detail',$featured_product->slug)}}" title="" class="thumb">
+                                <img src="{{asset($featured_product->thumb_main)}}">
                             </a>
-                            <a href="?page=detail_product" title="" class="product-name">Laptop Lenovo IdeaPad 120S</a>
+                            <div class="justify-content-between d-flex">
+                                <small class="code">Mã SP:{{$featured_product->code}}</small>
+                                <small class=""><svg class="pt-1" xmlns="http://www.w3.org/2000/svg" height="1em"
+                                        viewBox="0 0 576 512">
+                                        <path
+                                            d="M288 144a110.94 110.94 0 0 0-31.24 5 55.4 55.4 0 0 1 7.24 27 56 56 0 0 1-56 56 55.4 55.4 0 0 1-27-7.24A111.71 111.71 0 1 0 288 144zm284.52 97.4C518.29 135.59 410.93 64 288 64S57.68 135.64 3.48 241.41a32.35 32.35 0 0 0 0 29.19C57.71 376.41 165.07 448 288 448s230.32-71.64 284.52-177.41a32.35 32.35 0 0 0 0-29.19zM288 400c-98.65 0-189.09-55-237.93-144C98.91 167 189.34 112 288 112s189.09 55 237.93 144C477.1 345 386.66 400 288 400z" />
+                                    </svg>{{$featured_product->views}}</small>
+                            </div>
+                            <a href="{{route('client.product.detail',$featured_product->slug)}}" title=""
+                                class="product-name">{{Str::limit($featured_product->name, $limit = 35, $end =
+                                '...')}}</a>
                             <div class="price">
-                                <span class="new">5.190.000đ</span>
-                                <span class="old">6.190.000đ</span>
+                                <span class="new">{{number_format($featured_product->new_price, 0, '.','.').'đ'}}</span>
+                                @empty(!$featured_product->discount)
+                                <small class="old">{{number_format($featured_product->old_price, 0,
+                                    '.','.').'đ'}}</small>
+                                @endempty
                             </div>
                             <div class="action clearfix">
-                                <a href="?page=cart" title="" class="add-cart fl-left">Thêm giỏ hàng</a>
-                                <a href="?page=checkout" title="" class="buy-now fl-right">Mua ngay</a>
+                                <a href="{{route('client.cart.add',$featured_product->slug)}}" title=""
+                                    class="btn btn-style add-cart fl-left"><span>Thêm giỏ
+                                        hàng</span></a>
+                                <a href="?page=checkout" title="" class="btn btn-style buy-now fl-right"><span>Mua
+                                        ngay</span></a>
                             </div>
                         </li>
+                        @endforeach
                     </ul>
                 </div>
             </div>
+            @endif
+            @empty(!$groupedProducts)
+            @foreach($groupedProducts as $k=>$v)
             <div class="section" id="list-product-wp">
                 <div class="section-head">
-                    <h3 class="section-title">Điện thoại</h3>
+                    <h3 class="section-title cat-product">{{$k}}</h3>
                 </div>
                 <div class="section-detail">
                     <ul class="list-item clearfix">
+                        @foreach ($v as $item)
                         <li>
-                            <a href="?page=detail_product" title="" class="thumb">
-                                <img src="public/client/images/img-pro-16.png">
+                            <a href="{{route('client.product.detail',$item->slug)}}" title="" class="thumb">
+                                <img src="{{asset($item->thumb_main)}}">
                             </a>
-                            <a href="?page=detail_product" title="" class="product-name">Motorola Moto G5S Plus</a>
+                            <a href="{{route('client.product.detail',$item->slug)}}" title=""
+                                class="product-name">{{Str::limit($item->name,
+                                $limit = 35, $end =
+                                '...')}}</a>
+                            <div class="justify-content-between d-flex">
+                                <small class="code">Mã SP:{{$item->code}}</small>
+                                <small class=""><svg class="pt-1" xmlns="http://www.w3.org/2000/svg" height="1em"
+                                        viewBox="0 0 576 512">
+                                        <path
+                                            d="M288 144a110.94 110.94 0 0 0-31.24 5 55.4 55.4 0 0 1 7.24 27 56 56 0 0 1-56 56 55.4 55.4 0 0 1-27-7.24A111.71 111.71 0 1 0 288 144zm284.52 97.4C518.29 135.59 410.93 64 288 64S57.68 135.64 3.48 241.41a32.35 32.35 0 0 0 0 29.19C57.71 376.41 165.07 448 288 448s230.32-71.64 284.52-177.41a32.35 32.35 0 0 0 0-29.19zM288 400c-98.65 0-189.09-55-237.93-144C98.91 167 189.34 112 288 112s189.09 55 237.93 144C477.1 345 386.66 400 288 400z" />
+                                    </svg>{{$item->views}}</small>
+                            </div>
                             <div class="price">
-                                <span class="new">6.990.000đđ</span>
-                                <span class="old">8.990.000đđ</span>
+                                <span class="new">{{number_format($item->new_price, 0, '.','.').'đ'}}</span>
+                                @empty(!$item->discount)
+                                <small class="old">{{number_format($item->old_price, 0,
+                                    '.','.').'đ'}}</small>
+                                @endempty
                             </div>
                             <div class="action clearfix">
-                                <a href="?page=cart" title="Thêm giỏ hàng" class="add-cart fl-left">Thêm giỏ hàng</a>
-                                <a href="?page=checkout" title="Mua ngay" class="buy-now fl-right">Mua ngay</a>
+                                <a href="{{route('client.cart.add',$item->slug)}}" title=""
+                                    class="btn btn-style add-cart fl-left"><span>Thêm giỏ
+                                        hàng</span></a>
+                                <a href="?page=checkout" title="" class="btn btn-style buy-now fl-right"><span>Mua
+                                        ngay</span></a>
                             </div>
                         </li>
+                        @endforeach
                     </ul>
                 </div>
             </div>
+            @endforeach
+            @endempty
         </div>
-        <div class="sidebar fl-left">
-            <div class="section" id="category-product-wp">
-                <div class="section-head">
-                    <h3 class="section-title">Danh mục sản phẩm</h3>
-                </div>
-                <div class="secion-detail">
-                    <ul class="list-item">
-                        <li>
-                            <a href="?page=category_product" title="">Điện thoại</a>
-                            <ul class="sub-menu">
-                                <li>
-                                    <a href="?page=category_product" title="">Iphone</a>
-                                </li>
-                                <li>
-                                    <a href="?page=category_product" title="">Samsung</a>
-                                    <ul class="sub-menu">
-                                        <li>
-                                            <a href="?page=category_product" title="">Iphone X</a>
-                                        </li>
-                                        <li>
-                                            <a href="?page=category_product" title="">Iphone 8</a>
-                                        </li>
-                                        <li>
-                                            <a href="?page=category_product" title="">Iphone 8 Plus</a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <a href="?page=category_product" title="">Oppo</a>
-                                </li>
-                                <li>
-                                    <a href="?page=category_product" title="">Bphone</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="?page=category_product" title="">Máy tính bảng</a>
-                        </li>
-                        <li>
-                            <a href="?page=category_product" title="">laptop</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="section" id="selling-wp">
-                <div class="section-head">
-                    <h3 class="section-title">Sản phẩm bán chạy</h3>
-                </div>
-                <div class="section-detail">
-                    <ul class="list-item">
-                        <li class="clearfix">
-                            <a href="?page=detail_product" title="" class="thumb fl-left">
-                                <img src="public/client/images/img-pro-13.png" alt="">
-                            </a>
-                            <div class="info fl-right">
-                                <a href="?page=detail_product" title="" class="product-name">Laptop Asus A540UP I5</a>
-                                <div class="price">
-                                    <span class="new">5.190.000đ</span>
-                                    <span class="old">7.190.000đ</span>
-                                </div>
-                                <a href="" title="" class="buy-now">Mua ngay</a>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="section" id="banner-wp">
-                <div class="section-detail">
-                    <a href="" title="" class="thumb">
-                        <img src="public/client/images/banner.png" alt="">
-                    </a>
-                </div>
-            </div>
-        </div>
+        @include('inc.sbHome')
     </div>
 </div>
 @endsection

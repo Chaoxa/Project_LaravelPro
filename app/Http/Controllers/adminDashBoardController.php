@@ -17,9 +17,6 @@ class adminDashBoardController extends Controller
     }
     function dashboard(Request $request)
     {
-        // $user = User::find(22);
-        // return $user->hasPermission('user.view');
-
         return view('admin.dashboard');
     }
 }

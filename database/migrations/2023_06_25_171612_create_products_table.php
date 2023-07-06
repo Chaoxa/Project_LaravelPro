@@ -16,16 +16,19 @@ class CreateProductsTable extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('name', 300);
-            $table->string('code', 20);
-            $table->text('desc_quick');
-            $table->text('desc_detail');
+            $table->string('slug', 500);
+            $table->string('code', 20)->nullable();
+            $table->text('desc_quick')->nullable();
+            $table->text('desc_detail')->nullable();
             $table->string('thumb_main');
             $table->string('thumb_detail');
             $table->unsignedBigInteger('creator');
-            $table->decimal('discount', 5, 0);
+            $table->decimal('discount', 5, 0)->nullable();
             $table->integer('amount');
-            $table->decimal('old_price', 10, 0);
-            $table->decimal('new_price', 10, 0);
+            $table->decimal('old_price', 10, 0)->default(false);
+            $table->decimal('new_price', 10, 0)->default(false);
+            $table->integer('views')->default(0);
+            $table->integer('purchases')->default(0);
             $table->unsignedBigInteger('cat_id');
             $table->boolean('featured_products')->default(false);
             $table->boolean('status')->default(false);

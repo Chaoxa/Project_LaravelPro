@@ -4,12 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-
-use App\Color;
+use Illuminate\Support\Facades\Storage;
 use App\Config;
 use App\Product;
 use App\Cat_product;
 use App\User;
+use App\Color;
 
 class adminProductController extends Controller
 {
@@ -41,65 +41,287 @@ class adminProductController extends Controller
 
     function list()
     {
-
-        return view('admin.product.list');
+        $products = Product::orderBy('id', 'desc')->paginate(15);
+        return view('admin.product.list', compact('products'));
     }
 
-    function add(Request $request)
+    function add()
     {
         $colors = Color::all();
         $configs = Config::all();
-        return view('admin.product.add', compact('colors', 'configs'));
+
+        $categories = Cat_product::all();
+        $categoryOptions = $this->data_tree($categories);
+        // return dd($categoryOptions);
+        return view('admin.product.add', compact('colors', 'configs', 'categoryOptions'));
     }
 
-    function handle(Request $request)
+    function handle_add(Request $request)
     {
-        $request->validate(
-            [
-                'name' => ['required', 'string', 'max:255'],
-                'old_price' => ['required'],
-                'amount' => ['required'],
-                'new_price' => ['required'],
-                // 'cat' => ['required'],
-            ],
-            [
-                'required' => ':attribute không được để trống!',
-                'string' => 'Dữ liệu nhập vào phải là một chuỗi!',
-                'max' => ':attribute có độ dài lớn nhất :max ký tự!',
-                'unique' => 'Vai trò đã tồn tại trong hệ thống!'
-            ],
-            [
-                'name' => 'Tên người dùng',
-                'old_price' => 'Giá cũ',
-                'amount' => 'Số lượng',
-                'new_price' => 'Giá mới',
-                // 'cat' => 'Danh mục',
-            ]
-        );
 
-        return dd($request->input());
-        Product::create([
+        $request->validate([
+            'name' => ['required', 'string', 'max:255', 'unique:products'],
+            'old_price' => ['required'],
+            'slug' => ['required', 'unique:products'],
+            'amount' => ['required'],
+            'cat_id' => ['required'],
+            'new_price' => ['required'],
+            'file' => ['required', 'max:5242880', 'image'],
+        ], [
+            'required' => ':attribute không được để trống!',
+            'string' => 'Dữ liệu nhập vào phải là một chuỗi!',
+            'max' => ':attribute có độ dài lớn nhất :max ký tự!',
+            'unique' => ':attribute đã tồn tại trong hệ thống!',
+            'image' => ':attribute phải là một hình ảnh',
+            'mimes' => ':attribute phải có định dạng jpg, png, jpeg, gif',
+        ], [
+            'name' => 'Tên sản phẩm',
+            'slug' => 'Slug',
+            'old_price' => 'Giá cũ',
+            'amount' => 'Số lượng',
+            'new_price' => 'Giá mới',
+            'file' => 'Ảnh chính',
+            'cat_id' => 'Danh mục cha'
+        ]);
+
+        // return dd($request->input());
+
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            if ($file->isValid()) {
+                $fileName = $file->getClientOriginalName();
+                session(['file' => $fileName]);
+                $destinationPath = 'public/uploads';
+                $file->move($destinationPath, $fileName);
+            } else {
+                echo 'Ảnh không hợp lệ';
+            }
+        }
+
+        $result = [];
+        if ($request->hasFile('files')) {
+            $files = $request->file('files');
+            foreach ($files as $image) {
+                if ($image->isValid()) {
+                    $fileNameDetail = $image->getClientOriginalName();
+                    $destinationPath = 'public/uploads';
+                    $image->move($destinationPath, $fileNameDetail);
+                    $result[] = "uploads/" . $fileNameDetail;
+                } else {
+                    $result;
+                    echo 'Ảnh không hợp lệ';
+                }
+            }
+        }
+
+        // return dd($request->input());
+        if ($result) {
+            $thumb_detail = json_encode($result);
+        } else {
+            $thumb_detail = '';
+        }
+        $featured_products = $request->input('featured_products') ? 1 : 0;
+        $product = Product::create([
             'name' => $request->input('name'),
-            'code' => $request->input('code'),
-            'desc_quick' => $request->input('code'),
-            'desc_detail' => $request->input('status'),
-            'thumb_main' => $request->input('name'),
-            'thumb_detail' => $request->input('slug'),
-            'old_price' => $request->input('old_price'),
+            'slug' => $request->input('slug'),
+            'desc_quick' => $request->input('des_quick'),
+            'desc_detail' => $request->input('des_detail'),
+            'thumb_main' => 'uploads/' . $fileName,
+            'thumb_detail' => $thumb_detail,
+            'creator' => session('userID'),
             'discount' => $request->input('discount'),
-            'new_price' => $request->input('new_price'),
             'amount' => $request->input('amount'),
-            'featured_products' => $request->input('status'),
-            'creator' => $request->input('code'),
+            'old_price' => $request->input('old_price'),
+            'new_price' => $request->input('new_price'),
+            'cat_id' => $request->input('cat_id'),
+            'featured_products' => $featured_products,
             'status' => $request->input('status'),
         ]);
+
+        $product->colors()->attach($request->input('color'));
+        if (!empty($config)) {
+            $config = $request->input('config');
+            $priceInput = $request->input('priceInput');
+            $selectedConfigs = [];
+            foreach ($config as $kConfig => $vConfig) {
+                if ($priceInput[$kConfig] == null) {
+                    unset($config[$kConfig]);
+                    continue;
+                }
+                $selectedConfigs[] = $vConfig;
+            }
+            foreach ($selectedConfigs as $kConfig => $vConfig) {
+                $product->configs()->attach($vConfig, ['price' => $priceInput[$kConfig]]);
+            }
+        }
+        $product->code = 'TQ#' . $product->id;
+        $product->save();
+        toastr()->success('Đã thêm sản phẩm thành công!');
+        return redirect('admin/product/add');
+    }
+
+    function product_edit(Product $product)
+    {
+        $status0 = $product->status == 0;
+        $status1 = $product->status == 1;
+        $colors = Color::all();
+        $configs = Config::all();
+        $categories = Cat_product::all();
+        $categoryOptions = $this->data_tree($categories);
+        $thumb_detail = json_decode($product->thumb_detail);
+        // return dd($product);
+
+        return view('admin.product.update', compact('thumb_detail', 'product', 'colors', 'configs', 'categoryOptions', 'status0', 'status1'));
+    }
+
+    function product_update(Request $request, Product $product)
+    {
+        // return dd($request->input());
+        $request->validate([
+            'name' => ['required', 'string', 'max:255', 'unique:products,name,' . $product->id],
+            'slug' => ['required', 'unique:products,slug,' . $product->id],
+            'old_price' => ['required'],
+            'amount' => ['required'],
+            'cat_id' => ['required'],
+            'new_price' => ['required'],
+        ], [
+            'required' => ':attribute không được để trống!',
+            'string' => 'Dữ liệu nhập vào phải là một chuỗi!',
+            'max' => ':attribute có độ dài lớn nhất :max ký tự!',
+            'unique' => ':attribute đã tồn tại trong hệ thống!',
+            'image' => ':attribute phải là một hình ảnh',
+            'mimes' => ':attribute phải có định dạng jpg, png, jpeg, gif',
+        ], [
+            'name' => 'Tên sản phẩm',
+            'slug' => 'Slug',
+            'old_price' => 'Giá cũ',
+            'amount' => 'Số lượng',
+            'new_price' => 'Giá mới',
+            'cat_id' => 'Danh mục cha'
+        ]);
+
+        $fileName = '';
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            if ($file->isValid()) {
+                $fileName = $file->getClientOriginalName();
+                session(['file' => $fileName]);
+                $destinationPath = 'public/uploads';
+                $file->move($destinationPath, $fileName);
+            } else {
+                echo 'Ảnh không hợp lệ';
+            }
+        }
+
+        $result = [];
+        if ($request->hasFile('files')) {
+            $files = $request->file('files');
+            foreach ($files as $image) {
+                if ($image->isValid()) {
+                    $fileNameDetail = $image->getClientOriginalName();
+                    $destinationPath = 'public/uploads';
+                    $image->move($destinationPath, $fileNameDetail);
+                    $result[] = "uploads/" . $fileNameDetail;
+                } else {
+                    $result;
+                    echo 'Ảnh không hợp lệ';
+                }
+            }
+        }
+
+        if ($result) {
+            $thumb_detail = json_encode($result);
+        } else {
+            $thumb_detail = '';
+        }
+        if ($fileName && $thumb_detail) {
+            $featured_products = $request->input('featured_products') ? 1 : 0;
+            $product->update([
+                'name' => $request->input('name'),
+                'slug' => $request->input('slug'),
+                'desc_quick' => $request->input('des_quick'),
+                'desc_detail' => $request->input('des_detail'),
+                'thumb_main' => 'uploads/' . $fileName,
+                'thumb_detail' => $thumb_detail,
+                'discount' => $request->input('discount'),
+                'amount' => $request->input('amount'),
+                'old_price' => $request->input('old_price'),
+                'new_price' => $request->input('new_price'),
+                'cat_id' => $request->input('cat_id'),
+                'featured_products' => $featured_products,
+                'status' => $request->input('status'),
+            ]);
+        } elseif ($fileName) {
+            $featured_products = $request->input('featured_products') ? 1 : 0;
+            $product->update([
+                'name' => $request->input('name'),
+                'slug' => $request->input('slug'),
+                'desc_quick' => $request->input('des_quick'),
+                'desc_detail' => $request->input('des_detail'),
+                'thumb_main' => 'uploads/' . $fileName,
+                'discount' => $request->input('discount'),
+                'amount' => $request->input('amount'),
+                'old_price' => $request->input('old_price'),
+                'new_price' => $request->input('new_price'),
+                'cat_id' => $request->input('cat_id'),
+                'featured_products' => $featured_products,
+                'status' => $request->input('status'),
+            ]);
+        } elseif ($thumb_detail) {
+            $featured_products = $request->input('featured_products') ? 1 : 0;
+            $product->update([
+                'name' => $request->input('name'),
+                'slug' => $request->input('slug'),
+                'desc_quick' => $request->input('des_quick'),
+                'desc_detail' => $request->input('des_detail'),
+                'thumb_detail' => $thumb_detail,
+                'discount' => $request->input('discount'),
+                'amount' => $request->input('amount'),
+                'old_price' => $request->input('old_price'),
+                'new_price' => $request->input('new_price'),
+                'cat_id' => $request->input('cat_id'),
+                'featured_products' => $featured_products,
+                'status' => $request->input('status'),
+            ]);
+        } else {
+            $featured_products = $request->input('featured_products') ? 1 : 0;
+            $product->update([
+                'name' => $request->input('name'),
+                'slug' => $request->input('slug'),
+                'desc_quick' => $request->input('des_quick'),
+                'desc_detail' => $request->input('des_detail'),
+                'discount' => $request->input('discount'),
+                'amount' => $request->input('amount'),
+                'old_price' => $request->input('old_price'),
+                'new_price' => $request->input('new_price'),
+                'cat_id' => $request->input('cat_id'),
+                'featured_products' => $featured_products,
+                'status' => $request->input('status'),
+            ]);
+        }
+        // $product->save();
+        $product->colors()->sync($request->input('color'));
+
+        $config = $request->input('config');
+        $priceInput = $request->input('priceInput');
+
+        if (!empty($config)) {
+            $syncData = [];
+            foreach ($config as $kConfig => $vConfig) {
+                if ($priceInput[$kConfig] == null) {
+                    unset($config[$kConfig]);
+                    continue;
+                }
+                $syncData[$vConfig] = ['price' => $priceInput[$kConfig]];
+            }
+            $product->configs()->sync($syncData);
+        }
+        toastr()->success('Cập nhật sản phẩm thành công!');
+        return redirect()->route('product.edit', $product->id);
     }
 
     function category()
     {
-
-
-
         $categories = Cat_product::all();
         $categoryOptions = $this->data_tree($categories);
         // return dd($categories->toArray());
@@ -112,6 +334,7 @@ class adminProductController extends Controller
         $request->validate(
             [
                 'name' => ['required', 'string', 'max:255'],
+                'slug' => ['required'],
             ],
             [
                 'required' => ':attribute không được để trống!',
@@ -121,23 +344,24 @@ class adminProductController extends Controller
             ],
             [
                 'name' => 'Tên danh mục',
+                'slug' => 'Slug',
             ]
         );
 
         $parentId = $request->input('parent_category') ? $request->input('parent_category') : 0;
         Cat_product::create([
             'name' => $request->input('name'),
-            'slug' => Str::slug($request->input('name')),
+            'slug' => $request->input('slug'),
             'parent_id' => $parentId,
             'creator' => session('userID'),
             'status' => $request->input('status'),
         ]);
-        return redirect('admin/product/cat')->with('status', '▶Đã thêm danh mục thành công!');
+        toastr()->success('Đã thêm danh mục thành công!');
+        return redirect('admin/product/cat');
     }
 
     function cat_edit(Cat_product $cat)
     {
-
         $categories = Cat_product::all();
         $categoryOptions = $this->data_tree($categories);
         $creator = getFieldbyID(User::class, 'name', $cat->creator);
@@ -165,9 +389,8 @@ class adminProductController extends Controller
             'parent_id' => $parentId,
             'status' => $request->input('status'),
         ]);
-
-        return redirect('admin/product/cat')->with('status', '▶Cập nhật thành công!');
-        // return response()->json(['status' => 'success', 'message' => 'Product updated successfully']);
+        toastr()->success('Cập nhật thành công!');
+        return redirect('admin/product/cat');
     }
 
     function cat_delete(Cat_product $cat)
@@ -177,7 +400,8 @@ class adminProductController extends Controller
         $cat_products->where('parent_id', $cat->id)->each(function ($item) {
             $item->delete();
         });
-        return redirect('admin/product/cat')->with('status', '▶Đã xóa danh mục!');
+        toastr()->success('Đã xóa danh mục!');
+        return redirect('admin/product/cat');
     }
 
 
@@ -230,8 +454,8 @@ class adminProductController extends Controller
             'status' => $request->input('status'),
         ]);
         // return dd($request->input());
-
-        return redirect('admin/product/color')->with('status', '▶Đã thêm màu sắc thành công!');
+        toastr()->success('Đã thêm màu sắc thành công!');
+        return redirect('admin/product/color');
     }
 
     function color_update(Request $request, Color $color)
@@ -257,7 +481,8 @@ class adminProductController extends Controller
             'code' => $request->input('code'),
             'status' => $request->input('status'),
         ]);
-        return redirect('admin/product/color')->with('status', '▶Cập nhật màu sắc thành công!');
+        toastr()->success('Cập nhật màu sắc thành công!');
+        return redirect('admin/product/color');
     }
 
     function config(Request $request)
@@ -271,6 +496,7 @@ class adminProductController extends Controller
         $request->validate(
             [
                 'name' => ['required', 'string', 'max:255', 'unique:configs'],
+                'slug' => ['required'],
                 'storage' => ['required', 'string', 'max:20'],
                 'price' => ['required', 'string', 'max:20'],
             ],
@@ -281,6 +507,7 @@ class adminProductController extends Controller
             ],
             [
                 'name' => 'Màu sắc',
+                'slug' => 'Slug',
                 'storage' => 'Khả năng lữu trữ',
                 'price' => 'Giá tiền'
             ]
@@ -294,7 +521,8 @@ class adminProductController extends Controller
             'price' => $request->input('price'),
             'status' => $request->input('status')
         ]);
-        return redirect('admin/product/config')->with('status', '▶Đã thêm cấu hình thành công!');
+        toastr()->success('Đã thêm cấu hình thành công!');
+        return redirect('admin/product/config');
     }
 
     function config_edit(Config $config)
@@ -340,12 +568,22 @@ class adminProductController extends Controller
             'price' => $request->input('price'),
             'status' => $request->input('status')
         ]);
-        return redirect('admin/product/config')->with('status', '▶Đã cập nhật thành công!');
+        toastr()->success('Cập nhật thành công!');
+
+        return redirect('admin/product/config');
     }
 
     function config_delete(Config $config)
     {
         $config->delete();
-        return redirect()->route('product.config')->with('status', 'Đã xóa cấu hình!');
+        toastr()->success('Đã xóa cấu hình!');
+        return redirect()->route('product.config');
+    }
+
+    function color_delete(Color $color)
+    {
+        $color->delete();
+        toastr()->success('Đã xóa màu sắc!');
+        return redirect()->route('product.color');
     }
 }

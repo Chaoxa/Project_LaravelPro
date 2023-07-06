@@ -17,7 +17,6 @@ class CreateConfigsTable extends Migration
             $table->id();
             $table->string('name', 50);
             $table->string('memory', 200);
-            $table->decimal('price', 10, 0);
             $table->unsignedBigInteger('creator');
             $table->foreign('creator')->references('id')->on('users')->onDelete('cascade');
             $table->boolean('status')->default(false);
