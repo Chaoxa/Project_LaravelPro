@@ -92,7 +92,7 @@
                                 @else
                                 <td><span class="text-badge badge badge-success">Công khai</span></td>
                                 @endif
-                                <td>{{$color -> updated_at}}</td>
+                                <td>{{$color -> updated_at->format('H:i | d/m/Y')}}</td>
                                 <td>
                                     <a data-toggle="modal" data-id="{{ $color->id }}" data-target="#exampleModalCenter"
                                         class="btn btn-success btn-edit btn-sm rounded-0 text-white" type="button"

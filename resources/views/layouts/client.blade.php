@@ -39,7 +39,7 @@
                                     <a href="{{route('home')}}" title="">Trang chủ</a>
                                 </li>
                                 <li>
-                                    <a href="?page=blog" title="">Blog</a>
+                                    <a href="{{route('client.blog.show')}}" title="">Blog</a>
                                 </li>
                                 <li>
                                     <a href="{{route('client.product.show')}}" title="">Sản phẩm</a>

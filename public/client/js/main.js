@@ -169,3 +169,22 @@ function selectOption(event, optionId) {
     var selectedButton = event.target;
     selectedButton.classList.add("selected");
 }
+
+$(document).ready(function () {
+    var originalDescOffset = $("#post-product-wp").offset().top;
+    $(".desc-detail-full").hide();
+
+    $(".view-mode").click(function () {
+        if ($(".desc-detail-full").is(":visible")) {
+            $(".desc-detail-demo").show();
+            $(".desc-detail-full").hide();
+            $(".view-mode").text("Xem thêm");
+            $("html, body").animate({ scrollTop: originalDescOffset }, "slow");
+        } else {
+            $("html, body").animate({ scrollTop: originalDescOffset }, "slow");
+            $(".desc-detail-demo").hide();
+            $(".desc-detail-full").show();
+            $(".view-mode").text("Ẩn bớt");
+        }
+    });
+});

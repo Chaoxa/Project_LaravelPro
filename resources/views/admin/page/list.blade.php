@@ -35,9 +35,10 @@
                         <td>{{$page->slug}}</td>
                         <td class="text-center"><small><b>{{$page->users->name}}</b></small>
                             <br>
-                            <b class="btn-sm btn-primary text-center">{{$page->users->roles[0]['name']}}</b>
+                            <p class="bg-secondary text-white rounded px-1 text-center d-inline-block mb-0">
+                                {{$page->users->roles[0]['name']}}</p>
                         </td>
-                        <td>{{$page->created_at}}</td>
+                        <td>{{$page->created_at->format('d/m/Y | H:i')}}</td>
                         <td>
                             <a href="{{route('admin.page.edit',$page)}}"
                                 class="btn btn-success btn-sm rounded-0 text-white" type="button" data-toggle="tooltip"

@@ -33,9 +33,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {{-- @php
-                        return dd(Cart::Content());
-                        @endphp --}}
                         @foreach (Cart::Content() as $product)
                         <tr>
                             <td>{{$product->id}}</td>

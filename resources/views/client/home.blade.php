@@ -177,7 +177,9 @@
             @endforeach
             @endempty
         </div>
-        @include('inc.sbHome')
+        <div class="sidebar fl-left">
+            @include('inc.sbHome')
+        </div>
     </div>
 </div>
 @endsection

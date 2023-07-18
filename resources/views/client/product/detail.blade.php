@@ -41,35 +41,8 @@
                             @php
                             $lengthString = strlen($product->desc_quick);
                             @endphp
-                            {!! Str::limit(htmlspecialchars_decode($product->desc_quick), $limit = 150, $end = '...')
-                            !!}
+                            <div class="desc-quick"> {!! htmlspecialchars_decode($product->desc_quick)!!}</div>
                         </div>
-                        <style>
-                            .option-buttons {
-                                display: flex;
-                            }
-
-                            .option-button {
-                                padding: 5px 10px;
-                                background-color: #e0e0e0;
-                                border: none;
-                                border-radius: 5px;
-                                margin-right: 10px;
-                                font-weight: 500;
-                                cursor: pointer;
-                                transition: background-color 0.3s ease;
-                            }
-
-                            .option-button.selected {
-                                background-color: #e5fee5;
-                            }
-
-                            .option-button.selected::after {
-                                content: '\2713';
-                                display: inline-block;
-                                margin-left: 5px;
-                            }
-                        </style>
                         @if ($lengthString > 150)
                         <button type="button" class="btn btn-sm btn-outline-secondary mb-1" data-toggle="modal"
                             data-target="#exampleModalLong">
@@ -102,43 +75,59 @@
             </div>
             <div class="section" id="post-product-wp">
                 <div class="section-head">
-                    <h3 class="section-title">Mô tả sản phẩm</h3>
+                    <h3 class="section-title bg-warning d-inline-block p-1 rounded">Mô tả sản phẩm</h3>
                 </div>
                 <div class="section-detail">
-                    <p class="partial-description">{!! substr(htmlspecialchars_decode($product->desc_detail), 0, 600)
-                        !!}</p>
-                    <div class="full-description" style="display: none;">
-                        {!! $product->desc_detail !!}
+                    <div class="desc-detail-demo">
+                        <div class="desc-detail">
+                            {!! htmlspecialchars_decode($product->desc_detail) !!}
+                        </div>
                     </div>
-                    <button class="btn-view-more">Hiển thị toàn bộ</button>
+                    <div class="desc-detail-full">
+                        {!!$product->desc_detail!!}
+                    </div>
+                    <div class="btn-more-info">
+                        <button class="view-mode">Xem thêm</button>
+                    </div>
                 </div>
-
             </div>
             <div class="section" id="same-category-wp">
                 <div class="section-head">
-                    <h3 class="section-title">Cùng chuyên mục</h3>
+                    <h3 class="section-title bg-warning d-inline-block p-1 rounded">Cùng chuyên mục</h3>
                 </div>
                 <div class="section-detail">
                     <ul class="list-item">
+                        @foreach ($categoryProducts as $categoryProduct)
                         <li>
                             <a href="" title="" class="thumb">
-                                <img src="public/images/img-pro-17.png">
+                                <a href=""> <img src="{{asset($categoryProduct->thumb_main)}}"></a>
                             </a>
-                            <a href="" title="" class="product-name">Laptop HP Probook 4430s</a>
+                            <a href="" title="" class="product-name">{{Str::limit($categoryProduct->name, $limit = 35,
+                                $end =
+                                '...')}}</a>
                             <div class="price">
-                                <span class="new">17.900.000đ</span>
-                                <span class="old">20.900.000đ</span>
+                                <span class="new">{{number_format($categoryProduct->new_price, 0, '.','.').'đ'}}</span>
+                                @empty(!$categoryProduct->discount)
+                                <small class="old">{{number_format($categoryProduct->old_price, 0,
+                                    '.','.').'đ'}}</small>
+                                @endempty
                             </div>
                             <div class="action clearfix">
-                                <a href="" title="" class="add-cart fl-left">Thêm giỏ hàng</a>
-                                <a href="" title="" class="buy-now fl-right">Mua ngay</a>
+                                <a href="{{route('client.cart.add',$categoryProduct->slug)}}" title=""
+                                    class="btn btn-style add-cart fl-left"><span>Thêm giỏ
+                                        hàng</span></a>
+                                <a href="?page=checkout" title="" class="btn btn-style buy-now fl-right"><span>Mua
+                                        ngay</span></a>
                             </div>
                         </li>
+                        @endforeach
                     </ul>
                 </div>
             </div>
         </div>
-        @include('inc.sbHome')
+        <div class="sidebar fl-left">
+            @include('inc.sbHome')
+        </div>
     </div>
 </div>
 <!-- Modal -->

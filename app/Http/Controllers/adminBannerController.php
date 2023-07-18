@@ -15,10 +15,31 @@ class adminBannerController extends Controller
         });
     }
 
-    function index()
+    function index(Request $request)
     {
-        $banners = Banner::all();
-        return view('admin.banner.list', compact('banners'));
+        if ($request->input('status') == 'active' && $request->input('status') != '' || $request->input('status') == '') {;
+            $keyword = $request->input('key', '');
+            $banners = Banner::where('name', 'LIKE', "%$keyword%")->orderBy('id', 'asc')->paginate(15);
+
+            $list_act = [
+                'disable' => 'Vô hiệu hóa'
+            ];
+            $url_delete = 'admin/banner/delete/';
+            $url_btn_success = 'admin/banner/edit/';
+        } else {
+            $keyword = $request->input('key', '');
+            $banners = Banner::onlyTrashed()->where('name', 'LIKE', "%{$keyword}%")->orderBy('id', 'asc')->paginate(15);
+            $list_act = [
+                'restore' => 'Kích hoạt',
+                'forceDelete' => 'Xóa vĩnh viễn'
+            ];
+            $url_delete = 'admin/banner/forcedelete/';
+            $url_btn_success = 'admin/banner/restore/';
+        }
+        $numUsersActive = Banner::count();
+        $numSoftDelete = Banner::onlyTrashed()->count();
+
+        return view('admin.banner.list', compact('banners', 'keyword', 'numUsersActive', 'numSoftDelete', 'list_act', 'url_delete', 'url_btn_success'));
     }
 
     function add()
@@ -149,6 +170,50 @@ class adminBannerController extends Controller
     function delete(Banner $banner)
     {
         $banner->delete();
-        return redirect('admin/banner/list')->with('status', '▶Đã xóa Banner!');
+        toastr()->error('Đã thêm banner vào mục tạm xóa!');
+        return redirect()->route('admin.banner.list');
+    }
+
+    public function action(Request $request)
+    {
+        $list_check = $request->input('list_check');
+        // return $request->input();
+        if ($list_check) {
+            $act = $request->input('act');
+            if ($act == 'disable') {
+                Banner::destroy($list_check);
+                toastr()->warning('Đã vô hiệu hóa banner!');
+                return redirect()->route('admin.banner.list');
+            } elseif ($act == 'restore') {
+                Banner::withTrashed()
+                    ->whereIn('id', $list_check)
+                    ->restore();
+                toastr()->success('Đã khôi phục banner!');
+                return redirect()->route('admin.banner.list');
+            } elseif ($act == 'forceDelete') {
+                Banner::withTrashed()
+                    ->whereIn('id', $list_check)
+                    ->forceDelete($list_check);
+                toastr()->error('Đã xóa banner!');
+                return redirect()->route('admin.banner.list');
+            }
+        } else {
+            toastr()->info('Bạn cần chọn phần tử trước khi thực thi!');
+            return redirect()->route('admin.banner.list');
+        }
+    }
+
+    public function restore($id)
+    {
+        Banner::withTrashed()->find($id)->restore();
+        toastr()->success('Sản phẩm đã được kích hoạt lại!');
+        return redirect()->route('product.view');
+    }
+
+    public function forceDelete($id)
+    {
+        Banner::withTrashed()->find($id)->forceDelete();
+        toastr()->error('Đã xóa banner!');
+        return redirect()->route('product.view');
     }
 }

@@ -48,11 +48,30 @@ Route::middleware('CheckLogin')->prefix('admin')->group(function () {
     Route::post('permission/handleUpdate/{id}', 'adminPermissionController@handleUpdate')->name('permission.handleUpdate')->middleware('CheckPermission:permission.update');
     Route::get('permission/delete/{id}', 'adminPermissionController@delete')->name('permission.delete')->middleware('CheckPermission:permission.delete');
 
+    Route::get('post/list', 'adminBlogController@index')->name('post.list')->middleware('CheckPermission:blog.view');
+    Route::get('post/add', 'adminBlogController@add')->name('admin.post.add')->middleware('CheckPermission:blog.add');
+    Route::post('post/store', 'adminBlogController@store')->name('post.store')->middleware('CheckPermission:blog.add');
+    Route::get('post/edit/{post}', 'adminBlogController@edit')->name('post.edit')->middleware('CheckPermission:blog.update');
+    Route::post('post/update/{post}', 'adminBlogController@update')->name('post.update')->middleware('CheckPermission:blog.update');
+    Route::get('post/delete/{post}', 'adminBlogController@delete')->name('post.delete')->middleware('CheckPermission:blog.delete');
+    Route::get('post/restore/{id}', 'adminBlogController@restore')->middleware('CheckPermission:blog.delete');
+    Route::get('post/forcedelete/{post}', 'adminBlogController@forceDelete')->middleware('CheckPermission:blog.delete');
+    Route::post('post/action', 'adminBlogController@action')->name('post.action')->middleware('CheckPermission:blog.delete');
+    Route::get('post/cat', 'adminBlogController@category')->name('post.cat')->middleware('CheckPermission:post.add');
+    Route::post('post/cat/add', 'adminBlogController@category_add')->name('post.cat.add')->middleware('CheckPermission:blog.add');
+    Route::get('post/cat/delete/{cat}', 'adminBlogController@category_delete')->name('post.cat.delete')->middleware('CheckPermission:blog.delete');
+    Route::post('post/cat/edit/{cat}', 'adminBlogController@category_edit')->name('post.cat.edit')->middleware('CheckPermission:blog.update');
+    Route::post('post/cat/update/{cat}', 'adminBlogController@category_update')->name('post.cat.update')->middleware('CheckPermission:blog.update');
+
     Route::get('product/list', 'adminProductController@list')->name('product.view')->middleware('CheckPermission:product.view');
     Route::get('product/add', 'adminProductController@add')->name('product.add')->middleware('CheckPermission:product.add');
     Route::post('product/handle_add', 'adminProductController@handle_add')->name('product.handle.add')->middleware('CheckPermission:product.add');
     Route::get('product/edit/{product}', 'adminProductController@product_edit')->name('product.edit')->middleware('CheckPermission:product.update');
     Route::post('product/update/{product}', 'adminProductController@product_update')->name('product.update')->middleware('CheckPermission:product.update');
+    Route::get('product/delete/{product}', 'adminProductController@product_delete')->name('product.delete')->middleware('CheckPermission:product.delete');
+    Route::get('product/restore/{id}', 'adminProductController@restore')->middleware('CheckPermission:product.delete');
+    Route::get('product/forcedelete/{product}', 'adminProductController@forceDelete')->middleware('CheckPermission:product.delete');
+    Route::post('product/action', 'adminProductController@action')->name('product.action')->middleware('CheckPermission:product.delete');
     Route::get('product/cat', 'adminProductController@category')->name('product.cat')->middleware('CheckPermission:product.add');
     Route::post('product/cat/add', 'adminProductController@category_add')->name('product.cat.add')->middleware('CheckPermission:product.add');
     Route::post('product/cat/edit/{cat}', 'adminProductController@cat_edit')->name('product.cat.edit')->middleware('CheckPermission:product.update');
@@ -75,6 +94,8 @@ Route::middleware('CheckLogin')->prefix('admin')->group(function () {
     Route::post('slider/edit/{slider}', 'adminSliderController@edit')->name('admin.slider.edit')->middleware('CheckPermission:slider.update');
     Route::post('slider/update/{slider}', 'adminSliderController@update')->name('admin.slider.update')->middleware('CheckPermission:slider.update');
     Route::get('slider/delete/{slider}', 'adminSliderController@delete')->name('admin.slider.delete')->middleware('CheckPermission:slider.delete');
+    Route::post('slider/action', 'adminSliderController@action')->name('admin.slider.action')->middleware('CheckPermission:slider.delete');
+
 
 
     Route::get('banner/list', 'adminBannerController@index')->name('admin.banner.list')->middleware('CheckPermission:banner.view');
@@ -83,6 +104,8 @@ Route::middleware('CheckLogin')->prefix('admin')->group(function () {
     Route::post('banner/edit/{banner}', 'adminBannerController@edit')->name('admin.banner.edit')->middleware('CheckPermission:banner.update');
     Route::post('banner/update/{banner}', 'adminBannerController@update')->name('admin.banner.update')->middleware('CheckPermission:banner.update');
     Route::get('banner/delete/{banner}', 'adminBannerController@delete')->name('admin.banner.delete')->middleware('CheckPermission:banner.delete');
+    Route::post('banner/action', 'adminBannerController@action')->name('admin.banner.action')->middleware('CheckPermission:banner.delete');
+
 
     Route::get('page/show', 'adminPageController@index')->name('admin.page.show')->middleware('CheckPermission:page.view');
     Route::get('page/add', 'adminPageController@add')->name('admin.page.add')->middleware('CheckPermission:page.add');
@@ -90,6 +113,10 @@ Route::middleware('CheckLogin')->prefix('admin')->group(function () {
     Route::get('page/edit/{page}', 'adminPageController@edit')->name('admin.page.edit')->middleware('CheckPermission:page.update');
     Route::post('page/update/{page}', 'adminPageController@update')->name('admin.page.update')->middleware('CheckPermission:page.update');
     Route::get('page/delete/{page}', 'adminPageController@delete')->name('admin.page.delete')->middleware('CheckPermission:page.delete');
+
+    Route::get('order/show', 'adminOrderController@index')->name('admin.order.show')->middleware('CheckPermission:order.view');
+    Route::post('order/detail/{order}', 'adminOrderController@detail')->name('admin.order.detail')->middleware('CheckPermission:order.view');
+    Route::get('order/delete/{order}', 'adminOrderController@delete')->name('admin.order.delete')->middleware('CheckPermission:order.delete');
 });
 
 Route::group(['prefix' => 'laravel-filemanager'], function () {
@@ -101,6 +128,13 @@ Route::get('/', 'HomeController@index')->name('home');
 Route::get('trang-chu', 'HomeController@index')->name('home');
 
 Route::get('danh-muc/{slug}', 'ProductController@product_cat')->name('client.product.cat');
+
+Route::prefix('bai-viet')->group(function () {
+    Route::get('', 'BlogController@index')->name('client.blog.show');
+    // Route::get('{slug}', 'ProductController@product_detail')->name('client.product.detail');
+    // Route::post('add/option', 'ProductController@product_option')->name('client.product.option');
+});
+
 Route::prefix('san-pham')->group(function () {
     Route::get('', 'ProductController@list_product')->name('client.product.show');
     Route::get('{slug}', 'ProductController@product_detail')->name('client.product.detail');
@@ -113,5 +147,7 @@ Route::get('gio-hang/{slug}', 'CartController@add')->name('client.cart.add');
 Route::post('cart/update', 'CartController@update_ajax')->name('client.cart.update');
 Route::get('xoa-san-pham/{rowId}', 'CartController@delete')->name('client.cart.delete');
 Route::get('xoa-gio-hang', 'CartController@destroy')->name('client.cart.destroy');
+Route::post('cart/checkoutHandle', 'CartController@checkoutHandle')->name('client.cart.checkoutHandle');
+
 Route::get('cart/checkout', 'CartController@checkout')->name('client.cart.checkout');
 Route::get('{slug}', 'PageController@index')->name('client.page.show');

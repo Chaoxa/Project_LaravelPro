@@ -39,10 +39,31 @@ class adminProductController extends Controller
         return $result;
     }
 
-    function list()
+    function list(Request $request)
     {
-        $products = Product::orderBy('id', 'desc')->paginate(15);
-        return view('admin.product.list', compact('products'));
+        if ($request->input('status') == 'active' && $request->input('status') != '' || $request->input('status') == '') {;
+            $keyword = $request->input('key', '');
+            $products = Product::where('name', 'LIKE', "%$keyword%")->orderBy('id', 'asc')->paginate(15);
+
+            $list_act = [
+                'disable' => 'Vô hiệu hóa'
+            ];
+            $url_delete = 'admin/product/delete/';
+            $url_btn_success = 'admin/product/edit/';
+        } else {
+            $keyword = $request->input('key', '');
+            $products = Product::onlyTrashed()->where('name', 'LIKE', "%{$keyword}%")->orderBy('id', 'asc')->paginate(15);
+            $list_act = [
+                'restore' => 'Kích hoạt',
+                'forceDelete' => 'Xóa vĩnh viễn'
+            ];
+            $url_delete = 'admin/product/forcedelete/';
+            $url_btn_success = 'admin/product/restore/';
+        }
+        $numUsersActive = Product::count();
+        $numSoftDelete = Product::onlyTrashed()->count();
+
+        return view('admin.product.list', compact('products', 'keyword', 'numUsersActive', 'numSoftDelete', 'list_act', 'url_delete', 'url_btn_success'));
     }
 
     function add()
@@ -90,7 +111,6 @@ class adminProductController extends Controller
             $file = $request->file('file');
             if ($file->isValid()) {
                 $fileName = $file->getClientOriginalName();
-                session(['file' => $fileName]);
                 $destinationPath = 'public/uploads';
                 $file->move($destinationPath, $fileName);
             } else {
@@ -585,5 +605,55 @@ class adminProductController extends Controller
         $color->delete();
         toastr()->success('Đã xóa màu sắc!');
         return redirect()->route('product.color');
+    }
+
+    function product_delete(Product $product)
+    {
+        $product->delete();
+        toastr()->error('Đã thêm sản phẩm vào mục tạm xóa!');
+        return redirect()->route('product.view');
+    }
+
+    public function action(Request $request)
+    {
+        $list_check = $request->input('list_check');
+        // return $request->input();
+        if ($list_check) {
+            $act = $request->input('act');
+            if ($act == 'disable') {
+                Product::destroy($list_check);
+                toastr()->warning('Đã vô hiệu hóa sản phẩm!');
+                return redirect()->route('product.view');
+            } elseif ($act == 'restore') {
+                Product::withTrashed()
+                    ->whereIn('id', $list_check)
+                    ->restore();
+                toastr()->success('Đã khôi phục sản phẩm!');
+                return redirect()->route('product.view');
+            } elseif ($act == 'forceDelete') {
+                Product::withTrashed()
+                    ->whereIn('id', $list_check)
+                    ->forceDelete($list_check);
+                toastr()->error('Đã xóa sản phẩm!');
+                return redirect()->route('product.view');
+            }
+        } else {
+            toastr()->info('Bạn cần chọn phần tử trước khi thực thi!');
+            return redirect()->route('product.view');
+        }
+    }
+
+    public function restore($id)
+    {
+        Product::withTrashed()->find($id)->restore();
+        toastr()->success('Sản phẩm đã được kích hoạt lại!');
+        return redirect()->route('product.view');
+    }
+
+    public function forceDelete($id)
+    {
+        Product::withTrashed()->find($id)->forceDelete();
+        toastr()->error('Đã xóa sản phẩm!');
+        return redirect()->route('product.view');
     }
 }

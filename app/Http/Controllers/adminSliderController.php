@@ -14,10 +14,32 @@ class adminSliderController extends Controller
             return $next($request);
         });
     }
-    function index()
+
+    function index(Request $request)
     {
-        $sliders = Slider::all();
-        return view('admin.slider.list', compact('sliders'));
+        if ($request->input('status') == 'active' && $request->input('status') != '' || $request->input('status') == '') {;
+            $keyword = $request->input('key', '');
+            $sliders = Slider::where('name', 'LIKE', "%$keyword%")->orderBy('id', 'asc')->paginate(15);
+
+            $list_act = [
+                'disable' => 'Vô hiệu hóa'
+            ];
+            $url_delete = 'admin/slider/delete/';
+            $url_btn_success = 'admin/slider/edit/';
+        } else {
+            $keyword = $request->input('key', '');
+            $sliders = Slider::onlyTrashed()->where('name', 'LIKE', "%{$keyword}%")->orderBy('id', 'asc')->paginate(15);
+            $list_act = [
+                'restore' => 'Kích hoạt',
+                'forceDelete' => 'Xóa vĩnh viễn'
+            ];
+            $url_delete = 'admin/slider/forcedelete/';
+            $url_btn_success = 'admin/slider/restore/';
+        }
+        $numUsersActive = Slider::count();
+        $numSoftDelete = Slider::onlyTrashed()->count();
+
+        return view('admin.slider.list', compact('sliders', 'keyword', 'numUsersActive', 'numSoftDelete', 'list_act', 'url_delete', 'url_btn_success'));
     }
 
     function add()
@@ -150,5 +172,48 @@ class adminSliderController extends Controller
     {
         $slider->delete();
         return redirect('admin/slider/list')->with('status', '▶Đã xóa slider!');
+    }
+
+    public function action(Request $request)
+    {
+        $list_check = $request->input('list_check');
+        // return $request->input();
+        if ($list_check) {
+            $act = $request->input('act');
+            if ($act == 'disable') {
+                Slider::destroy($list_check);
+                toastr()->warning('Đã vô hiệu hóa sản phẩm!');
+                return redirect()->route('admin.slider.list');
+            } elseif ($act == 'restore') {
+                Slider::withTrashed()
+                    ->whereIn('id', $list_check)
+                    ->restore();
+                toastr()->success('Đã khôi phục sản phẩm!');
+                return redirect()->route('admin.slider.list');
+            } elseif ($act == 'forceDelete') {
+                Slider::withTrashed()
+                    ->whereIn('id', $list_check)
+                    ->forceDelete($list_check);
+                toastr()->error('Đã xóa sản phẩm!');
+                return redirect()->route('admin.slider.list');
+            }
+        } else {
+            toastr()->info('Bạn cần chọn phần tử trước khi thực thi!');
+            return redirect()->route('admin.slider.list');
+        }
+    }
+
+    public function restore($id)
+    {
+        Slider::withTrashed()->find($id)->restore();
+        toastr()->success('Sản phẩm đã được kích hoạt lại!');
+        return redirect()->route('slider.view');
+    }
+
+    public function forceDelete($id)
+    {
+        Slider::withTrashed()->find($id)->forceDelete();
+        toastr()->error('Đã xóa sản phẩm!');
+        return redirect()->route('slider.view');
     }
 }

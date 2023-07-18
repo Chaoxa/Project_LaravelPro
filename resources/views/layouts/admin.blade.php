@@ -68,7 +68,7 @@
                     </button>
                     <div class="dropdown-menu">
                         <a class="dropdown-item" href="{{route('admin.page.add')}}">Thêm trang</a>
-                        <a class="dropdown-item" href="">Thêm bài viết</a>
+                        <a class="dropdown-item" href="{{route('admin.post.add')}}">Thêm bài viết</a>
                         <a class="dropdown-item" href="{{route('product.add')}}">Thêm sản phẩm</a>
                         <a class="dropdown-item" href="{{route('admin.banner.add')}}">Thêm banner</a>
                         <a class="dropdown-item" href="{{route('admin.slider.add')}}">Thêm slider</a>
@@ -125,9 +125,8 @@
                         <i class="arrow fas fa-angle-right"></i>
                         <ul class="sub-menu">
                             <li><a href="{{url('admin/post/add')}}">Thêm mới</a></li>
-                            <li><a href="{{url('admin/post/list')}}">Danh sách bài viết</a></li>
-                            <li><a href="{{url('admin/post/cat/add')}}">Thêm danh mục</a></li>
-                            <li><a href="{{url('admin/post/cat/list')}}">Danh sách danh mục</a></li>
+                            <li><a href="{{url('admin/post/list')}}">Danh sách</a></li>
+                            <li><a href="{{url('admin/post/cat')}}">Danh mục</a></li>
                         </ul>
                     </li>
                     <li class="nav-link {{session('module_active')== 'product'?'active':''}}">
@@ -147,7 +146,7 @@
                         </ul>
                     </li>
                     <li class="nav-link {{session('module_active')== 'order'?'active':''}}">
-                        <a href="{{url('admin/order/list')}}">
+                        <a href="{{url('admin/order/show')}}">
                             <div class="nav-link-icon d-inline-flex">
                                 <i class="far fa-folder"></i>
                             </div>
@@ -155,8 +154,8 @@
                         </a>
                         <i class="arrow fas fa-angle-right"></i>
                         <ul class="sub-menu">
-                            <li><a href="{{url('admin/order/list')}}">Danh sách đơn hàng</a></li>
-                            <li><a href="{{url('admin/guest/list')}}">Khách hàng thân thiết</a></li>
+                            <li><a href="{{url('admin/order/show')}}">Danh sách đơn hàng</a></li>
+                            <li><a href="{{url('admin/guest/show')}}">Khách hàng thân thiết</a></li>
                         </ul>
                     </li>
                     <li class="nav-link {{session('module_active')== 'banner'?'active':''}} ">

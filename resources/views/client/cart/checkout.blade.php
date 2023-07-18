@@ -15,40 +15,53 @@
             </div>
         </div>
     </div>
+
     <div id="wrapper" class="wp-inner clearfix">
+        {!! Form::open(['route' => 'client.cart.checkoutHandle', 'method' => 'POST', 'name' =>
+        'form-checkout']) !!}
         <div class="section" id="customer-info-wp">
             <div class="section-head">
                 <h1 class="section-title">Thông tin khách hàng</h1>
             </div>
             <div class="section-detail">
-                <form method="POST" action="" name="form-checkout">
-                    <div class="form-row clearfix">
-                        <div class="form-col fl-left">
-                            <label for="fullname">Họ tên</label>
-                            <input type="text" name="fullname" id="fullname">
-                        </div>
-                        <div class="form-col fl-right">
-                            <label for="email">Email</label>
-                            <input type="email" name="email" id="email">
-                        </div>
+                <div class="form-row clearfix">
+                    <div class="form-col fl-left">
+                        {!! Form::label('fullname', 'Họ tên') !!}
+                        {!! Form::text('fullname', null, ['id' => 'fullname']) !!}
+                        @error('fullname')
+                        <small class="text-danger">{{$message}}</small>
+                        @enderror
                     </div>
-                    <div class="form-row clearfix">
-                        <div class="form-col fl-left">
-                            <label for="address">Địa chỉ</label>
-                            <input type="text" name="address" id="address">
-                        </div>
-                        <div class="form-col fl-right">
-                            <label for="phone">Số điện thoại</label>
-                            <input type="tel" name="phone" id="phone">
-                        </div>
+                    <div class="form-col fl-right">
+                        {!! Form::label('email', 'Email') !!}
+                        {!! Form::email('email', null, ['id' => 'email']) !!}
+                        @error('email')
+                        <small class="text-danger">{{$message}}</small>
+                        @enderror
                     </div>
-                    <div class="form-row">
-                        <div class="form-col">
-                            <label for="notes">Ghi chú</label>
-                            <textarea name="note"></textarea>
-                        </div>
+                </div>
+                <div class="form-row clearfix">
+                    <div class="form-col fl-left">
+                        {!! Form::label('address', 'Địa chỉ') !!}
+                        {!! Form::text('address', null, ['id' => 'address']) !!}
+                        @error('address')
+                        <small class="text-danger">{{$message}}</small>
+                        @enderror
                     </div>
-                </form>
+                    <div class="form-col fl-right">
+                        {!! Form::label('phone', 'Số điện thoại') !!}
+                        {!! Form::tel('phone', null, ['id' => 'phone']) !!}
+                        @error('phone')
+                        <small class="text-danger">{{$message}}</small>
+                        @enderror
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-col">
+                        {!! Form::label('notes', 'Ghi chú') !!}
+                        {!! Form::textarea('note') !!}
+                    </div>
+                </div>
             </div>
         </div>
         <div class="section" id="order-review-wp">
@@ -85,12 +98,12 @@
                 <div id="payment-checkout-wp">
                     <ul id="payment_methods">
                         <li>
-                            <input type="radio" id="direct-payment" name="payment-method" value="direct-payment">
-                            <label for="direct-payment">Thanh toán tại cửa hàng</label>
+                            <input type="radio" id="payment-home" checked name="payment-method" value="0">
+                            <label for="payment-home">Thanh toán tại nhà</label>
                         </li>
                         <li>
-                            <input type="radio" id="payment-home" name="payment-method" value="payment-home">
-                            <label for="payment-home">Thanh toán tại nhà</label>
+                            <input type="radio" id="direct-payment" name="payment-method" value="1">
+                            <label for="direct-payment">Thanh toán tại cửa hàng</label>
                         </li>
                     </ul>
                 </div>
@@ -99,6 +112,7 @@
                 </div>
             </div>
         </div>
+        {!! Form::close() !!}
     </div>
 </div>
 @endsection

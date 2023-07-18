@@ -195,6 +195,8 @@
 
 <script>
     function cat_update(id) {
+       var url = "cat/edit/" + id,
+        console.log(url)
     var data = {
         id: id,
         _token: '{{ csrf_token() }}'

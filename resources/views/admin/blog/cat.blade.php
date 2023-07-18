@@ -10,10 +10,10 @@
         <div class="col-4">
             <div class="card">
                 <div class="card-header font-weight-bold">
-                    Danh mục sản phẩm
+                    Danh mục bài viết
                 </div>
                 <div class="card-body">
-                    {{ Form::open(['route' => 'product.cat.add']) }}
+                    {{ Form::open(['route' => ['post.cat.add']]) }}
                     <div class="form-group">
                         {{ Form::label('name', 'Tên danh mục') }}
                         {{ Form::text('name', old('name'), ['class' => 'form-control']) }}
@@ -95,7 +95,7 @@
                                         class="btn btn-success btn-edit btn-sm rounded-0 text-white" type="button"
                                         data-toggle="tooltip" data-placement="top" title="Edit"><i
                                             class="fa fa-edit"></i></a>
-                                    <a href="{{url('admin/product/cat/delete/'.$cat -> id)}}"
+                                    <a href="{{route('post.cat.delete',$cat -> id)}}"
                                         onclick="return confirm('Bạn có chắc chắn muốn xóa admin này?')"
                                         class="btn btn-danger btn-sm rounded-0 text-white" type="button"
                                         data-toggle="tooltip" data-placement="top" title="Delete"><i
@@ -131,8 +131,7 @@
                     <div class="form-group">
                         {!! Form::label('name', 'Tên danh mục (*)', ['class' => 'title']) !!}
                         {!! Form::text('name', null, ['class' => 'form-control','id' => 'name_update', 'placeholder' =>
-                        'Tên
-                        danh mục']) !!}
+                        'Tên danh mục']) !!}
                     </div>
                     <div class="form-group">
                         {!! Form::label('slug_modal', 'Slug (*)', ['class' => 'title']) !!}
@@ -192,7 +191,6 @@
         </div>
     </div>
 </form>
-
 <script>
     function cat_update(id) {
     var data = {
@@ -206,6 +204,7 @@
         data: data,
         dataType: "json",
         success: function(data) {
+            console.log(data)
             $("#id_update").attr("action", "cat/update/" + data.id);
             $("#name_update").val(data.name);
             $("#slug_update").val(data.slug);

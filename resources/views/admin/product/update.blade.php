@@ -182,10 +182,6 @@
                 <small class="text-danger">{{$message}}</small>
                 @enderror
             </div>
-            @php
-            // $status = $product->status == 0;
-            // return var_dump($status);
-            @endphp
             <div class="form-group">
                 {{ Form::label('status', 'Trạng thái', ['class' => 'font-weight-bold']) }}
                 <div class="form-check">
