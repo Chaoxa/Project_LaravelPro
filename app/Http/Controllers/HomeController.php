@@ -7,6 +7,7 @@ use App\Product;
 use App\Cat_product;
 use App\Slider;
 use App\Banner;
+use App\Blog;
 use FontLib\Table\Type\name;
 
 class HomeController extends Controller
@@ -44,7 +45,7 @@ class HomeController extends Controller
         $render_menu =  render_menu($data, '', 'list-item');
         // return dd($render_menu);
 
-        $featured_products = Product::where('featured_products', 1)->get();
+        $featured_products = Product::where('discount', '>', 0)->get();
 
         $list_cat_parent = Cat_product::where('parent_id', 0)->get();
 
@@ -88,6 +89,16 @@ class HomeController extends Controller
         }
         $groupedProducts = collect($results)->groupBy('cat_name');
         // return dd($groupedProducts);
-        return view('client.home', compact('featured_products', 'render_menu', 'sliders', 'banners', 'products', 'groupedProducts'));
+
+        $listPostEnvironment = Blog::where('cat_parent', '19')
+            ->inRandomOrder()
+            ->take(2)
+            ->select('name', 'thumb_main')
+            ->get();
+        $listPost = Blog::inRandomOrder()
+            ->take(2)
+            ->get();
+        // return $listPost;
+        return view('client.home', compact('featured_products', 'render_menu', 'sliders', 'banners', 'products', 'groupedProducts', 'listPostEnvironment', 'listPost'));
     }
 }

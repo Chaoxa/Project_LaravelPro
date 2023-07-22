@@ -1,0 +1,66 @@
+#myTopHeader p {
+  margin: 0px;
+}
+
+#myMainHeader {
+  background: #2b5480;
+  font-size: 15px;
+}
+
+#myMainHeader .iconCart {
+  position: relative;
+}
+
+#myMainHeader .notifyIcon {
+  position: absolute;
+  background: red;
+  right: 0%;
+  top: -10%;
+  height: 20px;
+  padding: 2px;
+  width: 20px;
+  border-radius: 50%;
+  font-size: 15px;
+  align-items: center;
+}
+
+#myMainMenu {
+  background: #ff9100;
+}
+
+#myMainMenu {
+  font-weight: 500;
+  color: #fff;
+}
+
+#myMainMenu .cat {
+  background: #fe8700;
+}
+
+#myMainMenu ul li a {
+  font-weight: 500;
+  color: #fff;
+}
+#myMainMenu ul li a {
+  padding: 10px;
+  display: inline-block;
+}
+#headerRespon {
+  background: #2b5480;
+}
+
+#headerRespon .iconCart {
+  position: relative;
+}
+
+#headerRespon .notifyIcon {
+  position: absolute;
+  background: red;
+  right: 0%;
+  top: -25%;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  font-size: 15px;
+  align-items: center;
+}

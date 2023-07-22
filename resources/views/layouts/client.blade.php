@@ -2,272 +2,271 @@
 <html>
 
 <head>
-    <title>TQ STORE</title>
-    <meta charset="UTF-8">
+    <title>TQ Store</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="https://www.hdtgroup.vn/images/resort-icon.png">
-    <link href="{{asset('client/css/bootstrap/bootstrap-theme.min.css')}}" rel="stylesheet" type="text/css" />
-    <link href="{{asset('client/css/bootstrap/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
-    <link href="{{asset('client/reset.css')}}" rel="stylesheet" type="text/css" />
-    <link href="{{asset('client/css/carousel/owl.carousel.css')}}" rel="stylesheet" type="text/css" />
-    <link href="{{asset('client/css/carousel/owl.theme.css')}}" rel="stylesheet" type="text/css" />
-    <link href="{{asset('client/css/font-awesome/css/font-awesome.min.css')}}" rel="stylesheet" type="text/css" />
-    <link href="{{asset('client/css/font-awesome/css/font-awesome.css')}}" rel="stylesheet" type="text/css" />
-    <link href="{{asset('client/style.css')}}" rel="stylesheet" type="text/css" />
-    <link href="{{asset('client/responsive.css')}}" rel="stylesheet" type="text/css" />
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
-        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
-    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
-    <script src="{{asset('client/js/elevatezoom-master/jquery.elevatezoom.js')}}" type="text/javascript"></script>
-    <script src="{{asset('client/js/bootstrap/bootstrap.min.js')}}" type="text/javascript"></script>
-    <script src="{{asset('client/js/carousel/owl.carousel.js')}}" type="text/javascript"></script>
-    <script src="{{asset('client/js/main.js')}}" type="text/javascript"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="{{asset('client/style.css')}}">
+    <link rel="icon" href="https://cdn.haitrieu.com/wp-content/uploads/2021/10/Logo-DH-Cong-Nghe-Dong-A-EAUT.png"
+        type="image/gif" sizes="16x16">
+    <script src="https://code.jquery.com/jquery-3.7.0.js"
+        integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{{asset('client/owlcarousel/assets/owl.carousel.css')}}">
+    <link rel="stylesheet" href="{{asset('client/owlcarousel/assets/owl.theme.default.css')}}">
+    <link rel="stylesheet" href="{{asset('client/owlcarousel/assets/owl.carousel.min.css')}}">
+    <link rel="stylesheet" href="{{asset('client/owlcarousel/assets/owl.theme.default.min.css')}}">
 </head>
 
 <body>
-    <div id="site">
-        <div id="container">
-            <div id="header-wp">
-                <div id="head-top" class="clearfix">
-                    <div class="wp-inner">
-                        <a href="" title="" id="payment-link" class="fl-left">Hình thức thanh toán</a>
-                        <div id="main-menu-wp" class="fl-right">
-                            <ul id="main-menu" class="clearfix">
-                                <li>
-                                    <a href="{{route('home')}}" title="">Trang chủ</a>
-                                </li>
-                                <li>
-                                    <a href="{{route('client.blog.show')}}" title="">Blog</a>
-                                </li>
-                                <li>
-                                    <a href="{{route('client.product.show')}}" title="">Sản phẩm</a>
-                                </li>
-                                @empty(!$dataHeader)
-                                @foreach ($dataHeader as $value)
-                                <li>
-                                    <a href="{{ route('client.page.show', $value->slug) }}" title="">{{
-                                        $value->name}}</a>
-                                </li>
-                                @endforeach
-                                @endempty
-                            </ul>
+    <div id="header" class="d-none d-sm-block">
+        <section id="myTopHeader" class="py-1">
+            <div class="container">
+                <div class="row d-flex justify-content-between">
+                    <p class="col">Thỏa mãn nhu cầu người dùng - bán hàng toàn quốc</p>
+                    <div class="col">
+                        <div class="d-flex justify-content-end">
+                            <div class="iconHoline me-3 text-danger"><i class="fas fa-phone"></i></div>
+                            <p class="me-3">Hotline: 19006750</p>
+                            <a href="" class="me-2">Hệ thống cửa hàng |</a>
+                            <a href="">Tuyển dụng</a>
                         </div>
                     </div>
                 </div>
-                <div id="head-body" class="clearfix">
-                    <div class="wp-inner">
-                        <a href="{{url('trang-chu')}}" title="" id="logo" class="fl-left">
-                            <h1 class="d-block"><b class="text-danger">TQ</b> <b class="text-primary">Store</b></h1>
+            </div>
+        </section>
+        <section id="myMainHeader">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="text-white">
+                            <div class="logo py-3">
+                                <a href="{{route('home')}}" class="mb-1 d-block"><b class="text-white fs-2">TQ
+                                        Store</b></a>
+                                <p>Kiến tạo không gian</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="input-group py-4">
+                            <input type="text" class="form-control" placeholder="Tìm kiếm sản phẩm">
+                            <span class="input-group-text" id="basic-addon2"><i class="fas fa-search"></i></span>
+                        </div>
+                    </div>
+                    <div class="col-md-3 d-flex align-items-center">
+                        <div class="col-md-3">
+                            <div class="iconUser text-white fs-4 text-center">
+                                <i class="fas fa-user-plus"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-10">
+                            <div>
+                                <span> <a href="">Đăng nhập /</a></span>
+                                <span> <a href="">Đăng kí</a></span>
+                            </div>
+                            <p class="mb-0 text-white">Tài khoản của bạn</p>
+                        </div>
+                    </div>
+                    <div class="col-md-1 d-flex align-items-center">
+                        <a href="{{route('client.cart.show')}}"
+                            class="iconCart fs-3 text-white justify-content-end p-1">
+                            <i class="fas fa-cart-plus"></i>
+                            <div class="notifyIcon text-center">6</div>
                         </a>
-                        <div id="search-wp" class="fl-left">
-                            <form method="POST" action="" class="d-flex">
-                                <input type="text" placeholder="Bạn muốn tìm gì?" id="s" class="form-control mr-1">
-                                <button type="submit" class="btn btn-dark">Tìm
-                                    kiếm</button>
-                            </form>
-                        </div>
-                        <div id="action-wp" class="fl-right">
-                            <div id="advisory-wp" class="fl-left d-flex">
-                                <img src="https://media1.giphy.com/media/mbW2nvTE0TUc5IgRMm/giphy.gif?cid=6c09b952zt437d67rjkizo3c18jt9vkq7zt9blk1l5bx6wxs&rid=giphy.gif&ct=s"
-                                    alt="" width="50px">
-                                <div class="icon-phone"></div>
-                                <div class="contact">
-                                    <span class="title">Tư vấn (Quý)</span>
-                                    <span class="phone">0375.284.572</span>
-                                </div>
-                            </div>
-                            <div id="btn-respon" class="fl-right"><i class="fa fa-bars" aria-hidden="true"></i></div>
-                            <a href="{{route('client.cart.show')}}" title="giỏ hàng" id="cart-respon-wp"
-                                class="fl-right">
-                                <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                                <span id="num">2</span>
-                            </a>
-                            <div id="cart-wp" class="fl-right">
-                                <div id="btn-cart">
-                                    <a href="{{route('client.cart.show')}}" class="text-white"><i
-                                            class="fa fa-shopping-cart" aria-hidden="true"></i>
-                                        <span id="num">2</span></a>
-                                </div>
-                                <div id="dropdown">
-                                    <p class="desc">Có <span>2 sản phẩm</span> trong giỏ hàng</p>
-                                    <ul class="list-cart">
-                                        <li class="clearfix">
-                                            <a href="" title="" class="thumb fl-left">
-                                                <img src="public/images/img-pro-11.png" alt="">
-                                            </a>
-                                            <div class="info fl-right">
-                                                <a href="" title="" class="product-name">Sony Express X6</a>
-                                                <p class="price">6.250.000đ</p>
-                                                <p class="qty">Số lượng: <span>1</span></p>
-                                            </div>
-                                        </li>
-                                        <li class="clearfix">
-                                            <a href="" title="" class="thumb fl-left">
-                                                <img src="public/images/img-pro-23.png" alt="">
-                                            </a>
-                                            <div class="info fl-right">
-                                                <a href="" title="" class="product-name">Laptop Lenovo 10</a>
-                                                <p class="price">16.250.000đ</p>
-                                                <p class="qty">Số lượng: <span>1</span></p>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                    <div class="total-price clearfix">
-                                        <p class="title fl-left">Tổng:</p>
-                                        <p class="price fl-right">18.500.000đ</p>
-                                    </div>
-                                    <div class="action-cart clearfix">
-                                        <a href="?page=cart" title="Giỏ hàng" class="view-cart fl-left">Giỏ hàng</a>
-                                        <a href="?page=checkout" title="Thanh toán" class="checkout fl-right">Thanh
-                                            toán</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
-            <div id="wp-content">
-                @yield('content')
+        </section>
+        <section id="myMainMenu" class="text-white d-none d-sm-block">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12">
+                        <nav>
+                            <ul class="d-flex float-end">
+                                <li><a href="">Trang chủ</a></li>
+                                <li><a href="">Sản phẩm</a></li>
+                                <li><a href="">Blog</a></li>
+                                <li><a href="">Liên hệ</a></li>
+                                <li><a href="">Phản hồi khách hàng</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
             </div>
-            <div id="footer-wp">
-                <div id="foot-body">
-                    <div class="wp-inner clearfix">
-                        <div class="block" id="info-company">
-                            <div class="row">
-                                <a href="{{url('trang-chu')}}" title="" id="logo" class="fl-left">
-                                    <h1 class="d-block"><b class="text-danger">TQ</b> <b class="text-primary">Store</b>
-                                    </h1>
-                                </a>
+        </section>
+    </div>
+    <div id="headerRespon" class="d-none">
+        <div class="container">
+            <div class="row">
+                <div class="col-6 py-3">
+                    <div class="logo">
+                        <a href=""><b class="text-white my-3">TQ Store</b></a>
+                    </div>
+                </div>
+                <div class="col-6 d-flex justify-content-end my-3">
+                    <a href="" class="iconUser fs-6 me-1">
+                        <i class="fa-solid fa-user-tie"></i>
+                    </a>
+                    <a href="" class="iconCart fs-6">
+                        <i class="fas fa-cart-plus me-1"></i>
+                        <div class="notifyIcon text-center">6</div>
+                    </a>
+                    <nav class="navbar navbar-dark p-0 ms-1">
+                        <a data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar"
+                            aria-controls="offcanvasDarkNavbar" aria-label="Toggle navigation">
+                            <i class="fa-solid fa-bars fs-6 iconMenu"></i>
+                        </a>
+                        <div class="offcanvas offcanvas-start text-bg-dark" tabindex="-1" id="offcanvasDarkNavbar"
+                            aria-labelledby="offcanvasDarkNavbarLabel">
+                            <div class="offcanvas-header">
+                                <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">TQ Store</h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
+                                    aria-label="Close"></button>
                             </div>
-                            <div class="row mr-2">
-                                <p class="desc">TQ Store luôn cung cấp luôn là sản phẩm chính hãng có thông tin rõ
-                                    ràng,
-                                    chính
-                                    sách ưu đãi cực lớn cho khách hàng có thẻ thành viên.</p>
-                                <div id="payment">
-                                    <div class="thumb">
-                                        <img src="{{asset('client/images/img-foot.png')}}" alt="">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="block menu-ft" id="info-shop">
-                            <h3 class="title">Thông tin cửa hàng</h3>
-                            <ul class="list-item">
-                                <li>
-                                    <p>106 - Trần Bình - Cầu Giấy - Hà Nội</p>
-                                </li>
-                                <li>
-                                    <p>0375.284.572 - 0989.989.989</p>
-                                </li>
-                                <li>
-                                    <p>tranquy159@gmail.com</p>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="block menu-ft policy" id="info-shop">
-                            <h3 class="title">Chính sách mua hàng</h3>
-                            <ul class="list-item">
-                                <li>
-                                    <a href="" title="">Quy định - chính sách</a>
-                                </li>
-                                <li>
-                                    <a href="" title="">Chính sách bảo hành - đổi trả</a>
-                                </li>
-                                <li>
-                                    <a href="" title="">Chính sách hội viện</a>
-                                </li>
-                                <li>
-                                    <a href="" title="">Giao hàng - lắp đặt</a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="block" id="newfeed">
-                            <h3 class="title">Bảng tin</h3>
-                            <p class="desc">Đăng ký với chung tôi để nhận được thông tin ưu đãi sớm nhất</p>
-                            <div id="form-reg">
-                                <form>
-                                    <input type="email" name="email" id="email" placeholder="Nhập email tại đây">
-                                    <button type="submit" id="sm-reg">Đăng ký</button>
+                            <div class="offcanvas-body">
+                                <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" aria-current="page" href="#">Trang chủ</a>
+                                    </li>
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle" href="#" role="button"
+                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                            Sản phẩm
+                                        </a>
+                                        <ul class="dropdown-menu dropdown-menu-dark">
+                                            <li><a class="dropdown-item" href="#">Sản phẩm 1</a></li>
+                                            <li><a class="dropdown-item" href="#">Sản phẩm 2</a></li>
+                                            <li>
+                                                <hr class="dropdown-divider">
+                                            </li>
+                                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">Blog</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">Giới thiệu</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">Phản hồi khách hàng</a>
+                                    </li>
+                                </ul>
+                                <form class="d-flex mt-3 d-sm-none" role="search">
+                                    <input class="form-control me-2" type="search" placeholder="Search"
+                                        aria-label="Search">
+                                    <button class="btn btn-success" type="submit">Search</button>
                                 </form>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div id="foot-bot">
-                    <div class="wp-inner">
-                        <p id="copyright">© Bản quyền thuộc về unitop.vn | Php Master</p>
-                    </div>
+                    </nav>
                 </div>
             </div>
         </div>
-        <div id="menu-respon">
-            <a href="?page=home" title="" class="logo">VSHOP</a>
-            <div id="menu-respon-wp">
-                <ul class="" id="main-menu-respon">
-                    <li>
-                        <a href="?page=home" title>Trang chủ</a>
-                    </li>
-                    <li>
-                        <a href="?page=category_product" title>Điện thoại</a>
-                        <ul class="sub-menu">
-                            <li>
-                                <a href="?page=category_product" title="">Iphone</a>
-                            </li>
-                            <li>
-                                <a href="?page=category_product" title="">Samsung</a>
-                                <ul class="sub-menu">
-                                    <li>
-                                        <a href="?page=category_product" title="">Iphone X</a>
-                                    </li>
-                                    <li>
-                                        <a href="?page=category_product" title="">Iphone 8</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="?page=category_product" title="">Nokia</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="?page=category_product" title>Máy tính bảng</a>
-                    </li>
-                    <li>
-                        <a href="?page=category_product" title>Laptop</a>
-                    </li>
-                    <li>
-                        <a href="?page=category_product" title>Đồ dùng sinh hoạt</a>
-                    </li>
-                    <li>
-                        <a href="?page=blog" title>Blog</a>
-                    </li>
-                    <li>
-                        <a href="#" title>Liên hệ</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div id="btn-top"><img src="{{asset('client/images/icon-to-top.png')}}" alt="error" /></div>
-        <div id="fb-root"></div>
-        <script>
-            (function (d, s, id) {
-                    var js, fjs = d.getElementsByTagName(s)[0];
-                    if (d.getElementById(id))
-                        return;
-                    js = d.createElement(s);
-                    js.id = id;
-                    js.src = "//connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v2.8&appId=849340975164592";
-                    fjs.parentNode.insertBefore(js, fjs);
-                }(document, 'script', 'facebook-jssdk'));
-        </script>
-
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
-        </script>
+    </div>
 </body>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 </html>
+<div id="wp-content">
+    @yield('content')
+</div>
+<section id="myFooter" class="text-white">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-sm-12">
+                <div class="logo mb-3 d-none d-sm-block">
+                    <a href="" class="mb-1 d-block"><b class="text-white fs-2">TQ Store</b></a>
+                    <p>Kiến tạo không gian</p>
+                </div>
+                <div class="mb-2"><span class="me-2 mb-1"><i class="fas fa-map-marker-alt"></i></span>Đại học Công nghệ
+                    Đông Á</div>
+                <div class="mb-2"> <span class="me-2"><i class="fas fa-phone"></i></span>0375284572</div>
+                <div class="mb-2"> <span class="me-2"><i class="far fa-envelope"></i></span>tranquy52003@gmail.com</div>
+            </div>
+            <div class="col-md-3 col-sm-12">
+                <p class="title1 title">Tư vấn khách hàng <span class="toggle-icon d-sm-none"><i
+                            class="fas fa-caret-down"></i></span></p>
+                <ul class="collapse1 navbar-collapse">
+                    <li><a href="">Bảng giá sản phẩm</a></li>
+                    <li><a href="">Người dùng mới</a></li>
+                    <li><a href="">Làm thẻ thành viên</a></li>
+                    <li><a href="">Chính sách đổi mới</a></li>
+                    <li><a href="">Quy trình làm việc</a></li>
+                </ul>
+            </div>
+
+            <div class="col-md-3 col-sm-12">
+                <p class="title2 title">Hỗ trợ / Dịch vụ <span class="toggle-icon d-sm-none"><i
+                            class="fas fa-caret-down"></i></span></p>
+                <ul class="collapse2 navbar-collapse">
+                    <li><a href="">Hướng dẫn chung</a></li>
+                    <li><a href="">Hướng dẫn bảo hành</a></li>
+                    <li><a href="">Hướng dẫn kích hoạt</a></li>
+                    <li><a href="">Hướng dẫn mua hàng</a></li>
+                    <li><a href="">Hướng dẫn lắp đặt</a></li>
+                </ul>
+            </div>
+            <div class="col-md-2 col-sm-12">
+                <p class="title title3">Tổng đài hỗ trợ <span class="toggle-icon d-sm-none"><i
+                            class="fas fa-caret-down"></i></span></p>
+                <ul class="collapse3 navbar-collapse">
+                    <li>
+                        <div class="row my-1">
+                            <div class="d-flex">
+                                <div class="col-md-3 fs-3 py-2 me-2 me-sm-0">
+                                    <i class="fas fa-phone-volume"></i>
+                                </div>
+                                <div class="col-md-9">
+                                    <b class="fs-4 m-0">1900 6750</b>
+                                    <p class="m-0">Tư vấn online</p>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="row my-1">
+                            <div class="d-flex">
+                                <div class="col-md-3 fs-3 py-2 me-2 me-sm-0">
+                                    <i class="fas fa-phone-volume"></i>
+                                </div>
+                                <div class="col-md-9">
+                                    <b class="fs-4 m-0">1900 6750</b>
+                                    <p class="m-0">Phản ánh chất lượng</p>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <hr>
+                <div class="row">
+                    <p class="d-flex align-items-center mb-0"><span class="me-2 fs-3"><i
+                                class="far fa-envelope"></i></span>tranquy52003@gmail.com</p>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="container">
+            <div class="row p-0">
+                <div class="col-md-6 col-sm-12 p-0">
+                    <p class="mb-0 license">Bản quyền thuộc về <a href="">TQ Store</a> được thiết kế bởi Trần
+                        Quý</p>
+                </div>
+                <div class="col-md-6 col-sm-12 p-0">
+                    <div class="social d-flex float-md-end">
+                        <a href="https://www.facebook.com/thaiquymomo/" class="iconFacebook mx-1 text-white"><i
+                                class="fab fa-facebook-square"></i></a>
+                        <a href="" class="iconYoutobe mx-1 text-white"><i class="fab fa-youtube"></i></a>
+                        <a href="" class="iconInsta mx-1 text-white"><i class="fab fa-instagram-square"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{asset('client/owlcarousel/owl.carousel.min.js')}}"></script>;
+    <script src="{{asset('client/js/main.js')}}"></script>
+</section>
